@@ -143,8 +143,10 @@ Payment lifecycle:
 3. Seats are held for 5 minutes.
 4. User pays using demo bKash/Nagad phone, amount, and PIN.
 5. Wallet balance is deducted.
-6. Booking becomes paid/active.
+6. Booking status becomes active and `payment_status` becomes paid.
 7. Ticket PDF download becomes available.
+
+Expired payment-pending bookings are released when backend cleanup checks run, such as seat-layout, payment, dashboard, or booking lookup calls. There is no separate background scheduler currently running every second.
 
 ### Reduced Signup Friction
 
@@ -260,6 +262,16 @@ Current retrieval uses:
 - Provider policy enrichment for providers found in retrieved route docs
 - Holiday context filtering so Eid/holiday text is not injected unless the user asks for it
 
+Important clarification:
+
+```text
+The project currently does not use BM25.
+The project currently does not use hybrid search.
+The project currently does not use Reciprocal Rank Fusion / RRF.
+The project currently does not use Self-RAG or CRAG.
+```
+
+The current approach is semantic MMR retrieval plus structured exact-route augmentation. Hybrid search with BM25 + vector + RRF can be added later, but it is not part of the current implementation.
 
 ```mermaid
 flowchart LR
