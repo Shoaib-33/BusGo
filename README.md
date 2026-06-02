@@ -1,47 +1,69 @@
-# BusGo - Banglish AI Bus Ticket Booking Application
+# BusGo - Banglish AI Bus Ticket Booking Platform
 
-BusGo is a Bangla/Banglish-friendly bus ticket booking system with an AI assistant, seat selection, demo payment, user dashboard, admin dashboard, refund workflow, RAG retrieval, and RAGAS evaluation.
+BusGo is an AI-assisted bus ticket booking web application for Bangladeshi users who naturally search and book tickets in English or Banglish. The platform combines a conversational booking assistant with route search, fare comparison, seat selection, demo payment, ticket PDF download, user dashboard, admin dashboard, RBAC, cancellation, refund approval, RAG retrieval, and RAGAS evaluation.
 
-The project is built with:
+The main goal is to reduce rigid form filling. Users can ask naturally, the chatbot extracts booking details across turns, asks only for missing information, and connects the conversation to real UI actions such as seat selection, payment, and ticket download.
 
-- FastAPI
-- Jinja templates
-- SQLite
-- ChromaDB
-- LangChain
-- Gemini
-- Sentence Transformers
-- RAGAS
+## Key Highlights
 
-## Main Features
+| Area | Implementation |
+|---|---|
+| Conversational AI | Banglish/English chatbot powered by Gemini |
+| RAG | LangChain + ChromaDB + Sentence Transformers + Gemini |
+| Search Strategy | Semantic vector search with MMR, exact route metadata injection, provider policy enrichment |
+| Not Used | No BM25, no hybrid search, no RRF, no Self-RAG/CRAG |
+| Booking Automation | Chatbot collects route, provider, bus type, time, passenger, date, and phone details |
+| Seat Selection UI | Interactive picker with available, selected, booked, female-reserved, and window-seat states |
+| Demo Payment | bKash/Nagad demo wallet with PIN validation and wallet deduction |
+| Ticket Lifecycle | Payment-pending booking, 5-minute hold, paid ticket, PDF download, cancellation |
+| User Management | Signup/login, dashboard, chatbot-assisted account creation after booking |
+| RBAC | Separate user and admin dashboards |
+| Refund Workflow | Paid cancellation creates admin refund request; approval returns demo wallet balance |
+| Evaluation | Golden regression tests and RAGAS faithfulness/context metrics |
+| Deployment | Docker and Docker Compose with persistent named volumes |
+
+## Tech Stack
+
+| Layer | Tools |
+|---|---|
+| Backend | FastAPI, Pydantic |
+| Frontend | Jinja templates, HTML, CSS, JavaScript |
+| Database | SQLite |
+| AI / LLM | Gemini via `langchain-google-genai` |
+| RAG Framework | LangChain |
+| Vector Database | ChromaDB |
+| Embeddings | `sentence-transformers/all-MiniLM-L6-v2` |
+| Evaluation | Golden tests, RAGAS |
+| Runtime | Docker, Docker Compose |
+
+## Core Features
 
 ### Banglish AI Chatbot
 
-The chatbot supports English, Bangla-style English, and Banglish queries such as:
+Example queries:
 
 ```text
 Dhaka theke Rangpur e shobcheye kom dam e kon AC bus ase?
+Dhaka theke Rangpur e kom dam er Non AC bus konta?
+dhaka theke cox bazar e vlo bus konta?
 amar ticket cancel krte hbe
 refund pabo kivabe
-Dhaka theke Coxbazar e kom dam e AC bus kon jay?
+amar mobile number e booking ase kina check kore den
 ```
 
 The assistant can:
 
-- Answer route, fare, timing, provider, contact, and policy questions
-- Reply naturally in Banglish when the user writes Banglish
-- Identify cheapest AC/Non-AC buses
-- Mention bus departure times in route answers
-- Start and complete booking flows
-- Ask for missing booking details
-- Show seat picker when booking details are ready
-- Hold selected seats until demo payment
-- Cancel tickets
-- Explain refund status after cancellation
+- Detect source and destination from Banglish text.
+- Understand cheapest fare, quality preference, AC/Non-AC preference, booking, cancellation, refund, and lookup intents.
+- Answer route, fare, departure time, provider, contact, and policy questions.
+- Use conversation context for follow-up questions such as `non ac nai?` or `ei time gula kon bus er?`.
+- Ask for missing booking details only when required.
+- Show the seat picker when booking details are ready.
+- Guide the user to demo payment and ticket PDF download after seat confirmation.
 
-### Booking Flow
+### Conversational Booking Flow
 
-The chatbot can collect:
+The chatbot collects or confirms:
 
 - Passenger name
 - Phone number
@@ -55,70 +77,53 @@ The chatbot can collect:
 - Departure time
 - Seat numbers
 
-If the selected service has multiple departure times, the chatbot asks the user to choose a time before seat selection. The backend does not silently select the first time for multi-time services.
+If a selected service has multiple departure times, the backend does not silently choose the first option. The assistant asks the user to choose a departure time before seat selection.
 
-The selected departure time is shown during:
-
-- Seat selection
-- Payment-hold message
-- Booking lookup
-- Booking confirmation
-
-## Docker Setup
-
-Create a `.env` file in the project root before starting the container:
-
-```env
-GOOGLE_API_KEY=your_gemini_api_key
-GOOGLE_MODEL=gemini-2.0-flash
-```
-
-Build and run with Docker Compose:
-
-```bash
-docker compose up --build
-```
-
-Open the app:
-
-```text
-http://127.0.0.1:8004
-```
-
-Useful commands:
-
-```bash
-docker compose up -d --build
-docker compose logs -f app
-docker compose down
-```
-
-Docker persists runtime data in named volumes:
-
-- `busgo_data`: SQLite booking DB, demo payment DB, Chroma vectorstore
-- `busgo_hf_cache`: Hugging Face embedding model cache
-
-To reset all Docker runtime data:
-
-```bash
-docker compose down -v
+```mermaid
+flowchart TD
+    A[User asks naturally] --> B[LLM planner extracts intent and slots]
+    B --> C{Route/service known?}
+    C -- No --> D[Ask route/service follow-up]
+    C -- Yes --> E[Recommend or list matching buses]
+    E --> F{Departure time selected?}
+    F -- No --> G[Ask user to choose time]
+    G --> A
+    F -- Yes --> H{Passenger/date/phone complete?}
+    H -- No --> I[Ask only missing fields]
+    I --> A
+    H -- Yes --> J[Show seat picker UI]
+    J --> K[User confirms seats]
+    K --> L[Create payment-pending booking and hold seats]
+    L --> M[Demo bKash/Nagad payment]
+    M --> N[Activate ticket and enable PDF]
 ```
 
 ### Seat Selection
 
-Bookings are not saved as active tickets until the user selects seats.
+Bookings are not finalized until the user selects seats.
 
 The seat picker supports:
 
-- Booked seat blocking
-- Female-reserved seat indicators
+- Available seats
+- Selected seats
+- Booked seats
+- Female-reserved indicators
 - Window-seat indicators
-- Selected seat validation
-- Per-service seat locking by provider, route, date, bus type, and departure time
+- Passenger-count validation
+
+Seat blocking is scoped by:
+
+- Provider
+- Source and destination
+- Travel date
+- Bus type
+- Departure time
+
+This prevents duplicate seat booking for the same service instance.
 
 ### Demo Payment
 
-The app includes a demo wallet/payment system using SQLite.
+The app includes a demo payment system backed by `demo_payments.db`.
 
 Supported demo providers:
 
@@ -131,27 +136,21 @@ Seeded demo PIN:
 1234
 ```
 
-Payment flow:
+Payment lifecycle:
 
-1. Chatbot creates a payment-pending booking.
-2. Seats are held for 5 minutes.
-3. User pays through demo bKash/Nagad.
-4. Ticket becomes active after successful payment.
-5. PDF ticket download becomes available.
+1. User selects seats.
+2. Backend creates a payment-pending booking.
+3. Seats are held for 5 minutes.
+4. User pays using demo bKash/Nagad phone, amount, and PIN.
+5. Wallet balance is deducted.
+6. Booking becomes paid/active.
+7. Ticket PDF download becomes available.
 
-### Refund Workflow
+### Reduced Signup Friction
 
-Refund behavior:
+After a successful booking, the chatbot can offer account creation. Since the booking conversation already contains name and phone number, the account setup form can prefill those fields and ask only for a password.
 
-- If a paid ticket is cancelled, a refund request is automatically created for admin approval.
-- The chatbot tells the user:
-
-```text
-Apnar refund request admin panel e dewa hoyeche. Apni 48 hrs er moddhe refund peye jaben.
-```
-
-- If the ticket was not paid, the chatbot explains that no money was deducted and no refund is needed.
-- After admin approval, the refund amount is returned to the same demo wallet used for payment.
+Logged-in users can reuse saved name and phone details in future bookings.
 
 ### User Dashboard
 
@@ -162,12 +161,14 @@ Logged-in users can view:
 - Travel history
 - Cancelled tickets
 - PDF download links
-- Payment completion buttons
-- Refund request/cancellation options
+- Payment completion actions
+- Cancellation/refund options
 
-### Admin Dashboard
+### Admin Dashboard and RBAC
 
-Admin users get a sidebar dashboard with:
+BusGo has role-based access control for user and admin roles.
+
+Admin dashboard includes:
 
 - Dashboard summary
 - Bookings
@@ -179,33 +180,98 @@ Admin users get a sidebar dashboard with:
 - Refunds
 - Settings
 
-Admin can:
+Admins can view system-wide bookings, revenue summary, routes, users, operators, reports, and refund requests. Wallet balances are intentionally hidden from the admin dashboard.
 
-- View system-wide bookings
-- View platform revenue
-- View pending refunds
-- Approve refund requests
-- View users, operators, routes, and service summaries
+### Cancellation and Refund Workflow
 
-Wallet balances are intentionally hidden from the admin dashboard.
+Refund behavior:
 
-### RAG Pipeline
+- If an unpaid ticket is cancelled, the bot explains that no money was deducted.
+- If a paid ticket is cancelled, a refund request is created for admin review.
+- The chatbot tells the user:
 
-The AI assistant retrieves data from:
+```text
+Apnar refund request admin panel e dewa hoyeche. Apni 48 hrs er moddhe refund peye jaben.
+```
 
-- `data.json`
-- `holiday_calendar.json`
-- `attachment/*.txt`
+- After admin approval, the refund amount is returned to the same demo wallet used for payment.
 
-The RAG pipeline creates:
+## System Architecture
 
+```mermaid
+flowchart TB
+    U[User Browser] --> UI[Jinja HTML/CSS/JS]
+    UI --> API[FastAPI Backend]
+
+    API --> Auth[Auth + RBAC]
+    API --> Chat[Chatbot Planner + Booking Flow]
+    API --> Seat[Seat Layout + Seat Hold]
+    API --> Pay[Demo Payment]
+    API --> Refund[Refund Workflow]
+    API --> RAG[RAG Pipeline]
+    API --> PDF[Ticket PDF]
+
+    Chat --> DB1[(bus_bookings.db)]
+    Seat --> DB1
+    Pay --> DB1
+    Pay --> DB2[(demo_payments.db)]
+    Refund --> DB2
+
+    RAG --> Loader[Data Loader]
+    Loader --> Data[data.json]
+    Loader --> Holiday[holiday_calendar.json]
+    Loader --> Policy[attachment/*.txt]
+    RAG --> Vector[(ChromaDB vectorstore)]
+    RAG --> Gemini[Gemini]
+```
+
+## RAG Pipeline
+
+The RAG pipeline is implemented in `backend/rag_pipeline.py` and `backend/data_loader.py`.
+
+Data sources:
+
+- `data.json`: districts, dropping points, providers, route schedules, fares, amenities, ratings
+- `holiday_calendar.json`: holiday surcharge windows
+- `attachment/*.txt`: provider policy/contact/support text
+
+Chunk examples:
+
+- District and dropping-point chunks
+- Provider profile chunks
 - Route summary chunks
-- Route-provider chunks
-- Provider info chunks
-- Policy/contact chunks
-- Dropping point chunks
+- Route-provider service chunks
+- Reverse-route hint chunks
+- Provider policy/contact chunks
+- Holiday calendar chunks
+- General information chunks
 
-It stores embeddings in ChromaDB and sends retrieved context to Gemini.
+### Retrieval Details
+
+Current retrieval uses:
+
+- ChromaDB persistent vectorstore
+- HuggingFace sentence-transformer embeddings: `sentence-transformers/all-MiniLM-L6-v2`
+- Chroma retriever with `search_type="mmr"`
+- `k=18`, `fetch_k=60` for general retrieval
+- `k=12`, `fetch_k=40` with provider metadata filter when a provider is detected
+- Gemini-based query rewriting before retrieval
+- Exact route-document injection using metadata filters when source/destination are detected
+- Provider policy enrichment for providers found in retrieved route docs
+- Holiday context filtering so Eid/holiday text is not injected unless the user asks for it
+
+
+```mermaid
+flowchart LR
+    A[User Question] --> B[Gemini Query Rewrite]
+    B --> C[MMR Semantic Retrieval from Chroma]
+    B --> D[Exact Route Metadata Lookup]
+    C --> E[Filter Holiday Context]
+    D --> E
+    E --> F[Provider Policy Enrichment]
+    F --> G[Deduped Context]
+    G --> H[Gemini Answer]
+```
 
 The `/query/detailed` endpoint returns:
 
@@ -213,45 +279,113 @@ The `/query/detailed` endpoint returns:
 - `contexts`
 - `source_documents`
 
-This is used for RAGAS evaluation.
+This endpoint is used for RAGAS evaluation.
 
-### Holiday Fare Rules
+## Evaluation
 
-Holiday and Eid surcharge windows can be configured in:
+### Golden Regression Tests
+
+Golden tests validate app behavior such as:
+
+- Route/fare answers
+- Cheapest bus answers
+- Seat UI payload shape
+- Booking flow correctness
+- Payment/refund behavior
+- Latency per case
+
+Run all golden tests:
+
+```powershell
+.\venv\Scripts\python.exe run_golden_tests.py --base-url http://127.0.0.1:8004
+```
+
+Run one category:
+
+```powershell
+.\venv\Scripts\python.exe run_golden_tests.py --category route_fare
+```
+
+Run one case:
+
+```powershell
+.\venv\Scripts\python.exe run_golden_tests.py --case seat_ui_payload_shape
+```
+
+### RAGAS Evaluation
+
+RAGAS is used for chatbot/RAG answer evaluation, not for database booking correctness.
+
+The evaluator supports:
+
+- Faithfulness
+- Answer relevancy
+- Context precision
+- Context recall
+- Answer correctness
+- Answer similarity
+- Context entity recall
+
+For the Banglish RAGAS run, the most useful metrics were:
+
+- Faithfulness
+- Context precision
+- Context recall
+
+Current Banglish RAGAS result:
 
 ```text
-holiday_calendar.json
+Faithfulness:       0.921875  (~92.19%)
+Context Precision:  0.864583  (~86.46%)
+Context Recall:     1.000000  (100%)
+Rows evaluated:     8
 ```
 
-Example:
+Collect chatbot answers:
 
-```json
-{
-  "holidays": [
-    {
-      "name": "Eid-ul-Fitr",
-      "type": "eid",
-      "start_date": "2026-03-20",
-      "end_date": "2026-03-24",
-      "surcharge_percent": 25,
-      "note": "Book at least 7 days in advance."
-    }
-  ]
-}
+```powershell
+.\venv\Scripts\python.exe run_ragas_eval.py --dataset tests\ragas_banglish_dataset_10.json --base-url http://127.0.0.1:8004 --limit 10 --collect-only --report-json tests\ragas_banglish_report.json
 ```
 
-The surcharge is applied only if the selected travel date is inside the configured holiday window.
+Run faithfulness, precision, and recall:
+
+```powershell
+.\venv\Scripts\python.exe run_ragas_eval.py --from-report tests\ragas_banglish_report.json --limit 10 --metrics faithfulness,context_precision,context_recall --max-contexts 5 --report-json tests\ragas_banglish_fpr_report.json --report-csv tests\ragas_banglish_fpr_report.csv
+```
+
+Run all supported RAGAS metrics:
+
+```powershell
+.\venv\Scripts\python.exe run_ragas_eval.py --from-report tests\ragas_banglish_report.json --limit 10 --metrics all --max-contexts 5 --report-json tests\ragas_all_report.json --report-csv tests\ragas_all_report.csv
+```
+
+## Important API Endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/query/smart` | Main chatbot endpoint used by the UI |
+| POST | `/query/detailed` | RAG answer with contexts/source documents |
+| POST | `/chat/confirm-seat-booking` | Confirm seats selected from chatbot seat picker |
+| POST | `/chat/create-account` | Create account from chatbot-captured name/phone |
+| GET | `/seat-layout` | Get seat layout for a service |
+| GET | `/route-services` | Get route services, fares, and schedules |
+| POST | `/payments/demo` | Process demo bKash/Nagad payment |
+| POST | `/refunds/request/{booking_id}` | Request refund |
+| POST | `/refunds/approve/{refund_id}` | Admin approves refund |
+| GET | `/user/dashboard` | User dashboard data |
+| GET | `/admin/dashboard` | Admin dashboard data |
+| GET | `/tickets/{booking_id}.pdf` | Download printable ticket PDF |
 
 ## Project Structure
 
 ```text
 backend/
   main.py                 FastAPI routes, chatbot flow, booking/payment/refund logic
-  database.py             Booking/user SQLite helpers
+  database.py             Booking/user/auth SQLite helpers
   payment_database.py     Demo wallet, payment, and refund SQLite helpers
   models.py               Pydantic models
-  rag_pipeline.py         RAG pipeline using ChromaDB, LangChain, Gemini
-  data_loader.py          Data and policy chunk generation
+  rag_pipeline.py         Chroma/LangChain/Gemini RAG pipeline
+  data_loader.py          Data, route, holiday, and policy chunk generation
 
 templates/
   base.html
@@ -269,18 +403,12 @@ static/
   js/main.js
 
 attachment/               Provider policy/contact text files
-tests/
-  golden_dataset.json
-  golden_report.json
-  ragas_banglish_dataset_10.json
-  ragas_banglish_report.json
-  ragas_banglish_fpr_report.csv
-  ragas_banglish_fpr_report.json
+tests/                    Golden and RAGAS datasets/reports
 
-data.json                 Routes, providers, fares, districts, dropping points
+data.json                 Routes, providers, fares, schedules, ratings, amenities
 holiday_calendar.json     Holiday surcharge rules
-bus_bookings.db           Booking/user SQLite database
-demo_payments.db          Demo wallet/payment/refund SQLite database
+bus_bookings.db           Local booking/user SQLite database
+demo_payments.db          Local demo wallet/payment/refund database
 run_golden_tests.py       Golden regression evaluator
 run_ragas_eval.py         RAGAS evaluator
 requirements.txt
@@ -288,7 +416,7 @@ Dockerfile
 docker-compose.yml
 ```
 
-## Setup
+## Local Setup
 
 Create and activate a virtual environment:
 
@@ -303,32 +431,20 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-If you want to run RAGAS:
+For RAGAS:
 
 ```powershell
 .\venv\Scripts\python.exe -m pip install ragas datasets
 ```
 
-Create a `.env` file in the project root:
+Create a `.env` file:
 
 ```env
 GOOGLE_API_KEY=your_google_api_key_here
 GOOGLE_MODEL=gemini-2.0-flash
 ```
 
-Get a Google AI Studio API key from:
-
-```text
-https://aistudio.google.com/app/apikey
-```
-
-`GOOGLE_MODEL` is optional.
-
-## Run Locally
-
-The current development port used in this project is `8004`.
-
-Start the FastAPI app:
+Start the app:
 
 ```powershell
 .\venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8004
@@ -354,16 +470,49 @@ http://127.0.0.1:8004/login-page        Login
 http://127.0.0.1:8004/docs              API docs
 ```
 
-If port `8004` is already in use:
+## Docker Setup
 
-```powershell
-$pid=(Get-NetTCPConnection -LocalPort 8004 -State Listen).OwningProcess
-Stop-Process -Id $pid -Force
+Create a `.env` file in the project root:
+
+```env
+GOOGLE_API_KEY=your_gemini_api_key
+GOOGLE_MODEL=gemini-2.0-flash
 ```
 
-Then start the app again.
+Build and run:
 
-## Demo Accounts
+```bash
+docker compose up -d --build
+```
+
+Open:
+
+```text
+http://127.0.0.1:8004
+```
+
+Useful commands:
+
+```bash
+docker compose logs -f app
+docker compose ps
+docker compose down
+```
+
+Docker persists runtime data in named volumes:
+
+- `busgo_data`: booking DB, demo payment DB, Chroma vectorstore
+- `busgo_hf_cache`: Hugging Face embedding model cache
+
+Reset Docker runtime data:
+
+```bash
+docker compose down -v
+```
+
+Do not share `docker compose config` output publicly because it expands `.env` values and can print the Gemini API key.
+
+## Demo Credentials
 
 Admin:
 
@@ -378,226 +527,66 @@ Demo wallet PIN:
 1234
 ```
 
-## Docker
-
-```powershell
-docker compose up --build
-```
-
-Then open:
+## Example User Journey
 
 ```text
-http://127.0.0.1:8000
-```
+User: dhaka theke rangpur er ac bus er ticket lagbe?
+Bot: Suggests AC buses, fares, and departure times.
 
-## Example Banglish Queries
+User: National Travels 10:00 nibo
+Bot: Asks for missing name, phone, passenger count, and travel date.
 
-```text
-Dhaka theke Rangpur e shobcheye kom dam e kon AC bus ase?
-Dhaka theke Rangpur e kom dam er Non AC bus konta?
-Dhaka theke Rajshahi 500 takar niche kon kon bus ase?
-Dhaka theke Coxbazar e kom dam e AC bus kon jay?
-Hanif er contact number ar address dao
-Ena Paribahan er privacy policy ki?
-amar ticket cancel krte hbe
-refund pabo kivabe
-amar mobile number e booking ase kina check kore den
-```
+User: Shoaib, 01309183295, 3 jon, kalke
+Bot: Opens seat picker.
 
-Example answer for:
+User: Selects A3, B3, C3
+System: Creates payment-pending booking and holds seats for 5 minutes.
 
-```text
-Dhaka theke rangpur e shobcheye kom dam e kon bus ase AC?
-```
-
-Expected answer:
-
-```text
-National Travels AC, 720 Taka, departure times 10:00 and 22:00.
-```
-
-## Golden Evaluation
-
-The project includes a golden regression dataset:
-
-```text
-tests/golden_dataset.json
-```
-
-Start the app first:
-
-```powershell
-.\venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8004
-```
-
-Run all golden tests:
-
-```powershell
-.\venv\Scripts\python.exe run_golden_tests.py --base-url http://127.0.0.1:8004
-```
-
-Run one category:
-
-```powershell
-.\venv\Scripts\python.exe run_golden_tests.py --category route_fare
-```
-
-Run one case:
-
-```powershell
-.\venv\Scripts\python.exe run_golden_tests.py --case seat_ui_payload_shape
-```
-
-Report:
-
-```text
-tests/golden_report.json
-```
-
-## RAGAS Evaluation
-
-RAGAS is used for chatbot/RAG answer evaluation.
-
-For this project, the most useful metrics are:
-
-- Faithfulness
-- Context precision
-- Context recall
-
-RAGAS is not used to verify booking/payment/database correctness. Use golden/API tests for those flows.
-
-### Banglish RAGAS Dataset
-
-Dataset:
-
-```text
-tests/ragas_banglish_dataset_10.json
-```
-
-It contains 10 Banglish questions about:
-
-- Cheapest buses
-- AC/Non-AC fares
-- Departure times
-- Provider contact
-- Provider policy
-
-### Step 1: Collect Chatbot Answers
-
-```powershell
-.\venv\Scripts\python.exe run_ragas_eval.py --dataset tests\ragas_banglish_dataset_10.json --base-url http://127.0.0.1:8004 --limit 10 --collect-only --report-json tests\ragas_banglish_report.json
-```
-
-### Step 2: Run Faithfulness, Precision, Recall
-
-```powershell
-.\venv\Scripts\python.exe run_ragas_eval.py --from-report tests\ragas_banglish_report.json --limit 10 --metrics faithfulness,context_precision,context_recall --max-contexts 5 --report-json tests\ragas_banglish_fpr_report.json --report-csv tests\ragas_banglish_fpr_report.csv
-```
-
-Output:
-
-```text
-tests/ragas_banglish_fpr_report.json
-tests/ragas_banglish_fpr_report.csv
-```
-
-### Current Banglish RAGAS Result
-
-Latest report:
-
-```text
-tests/ragas_banglish_fpr_report.csv
-```
-
-Average scores:
-
-```text
-Faithfulness:       0.921875  (~92.19%)
-Context Precision:  0.864583  (~86.46%)
-Context Recall:     1.000000  (100%)
-```
-
-Rows evaluated:
-
-```text
-8
-```
-
-Two of the 10 cases were not included in the latest report, likely because Gemini quota/rate-limit issues interrupted answer collection or evaluation.
-
-Interpretation:
-
-- High faithfulness means most answers are grounded in retrieved context.
-- Perfect context recall means the required information was retrieved.
-- Lower context precision means retrieval still includes some unrelated chunks.
-
-Recommended improvements:
-
-- Filter route contexts more strictly by detected source and destination.
-- Return fewer high-quality contexts to the LLM and RAGAS.
-- For questions like "500 takar niche", list all matching services, not only one.
-- For "cheapest" questions, answer the cheapest option first and avoid extra providers unless comparison is requested.
-
-## Important API Endpoints
-
-```text
-POST /query                         Chatbot main endpoint
-POST /query/detailed                RAG answer with contexts/source documents
-POST /seat-selection/confirm        Confirm selected seats
-GET  /seat-layout                   Seat layout for a service
-POST /payments/demo                 Demo bKash/Nagad payment
-POST /refunds/request/{booking_id}  Request refund
-POST /refunds/approve/{refund_id}   Admin approve refund
-GET  /user/dashboard                User dashboard data
-GET  /admin/dashboard               Admin dashboard data
+User: Pays through demo bKash/Nagad
+System: Confirms ticket and enables PDF download.
 ```
 
 ## Troubleshooting
 
-### Port already in use
-
-If you see:
-
-```text
-[Errno 10048] only one usage of each socket address is normally permitted
-```
-
-Run:
+### Port Already In Use
 
 ```powershell
 $pid=(Get-NetTCPConnection -LocalPort 8004 -State Listen).OwningProcess
 Stop-Process -Id $pid -Force
 ```
 
-Then restart the app.
+### Gemini Quota Exhausted
 
-### Gemini quota exhausted
-
-If Gemini requests fail:
-
-- Make sure `.env` has a valid `GOOGLE_API_KEY`.
-- Make sure your Google AI Studio project has quota.
+- Check that `.env` contains a valid `GOOGLE_API_KEY`.
+- Confirm that the Google AI Studio project has quota.
 - Wait for quota reset or use another API key/project.
 - Restart the FastAPI server after changing `.env`.
 
-### ChromaDB stale data
+### ChromaDB Stale Data
 
-If retrieval seems stale:
-
-- Restart the app.
-- If needed, delete `vectorstore/` and start again.
-
-### Missing dependencies
+The vectorstore stores an index manifest based on chunk signature. If retrieval seems stale:
 
 ```powershell
-pip install -r requirements.txt
+Remove-Item -Recurse -Force vectorstore
 ```
 
-For RAGAS:
+Then restart the app.
 
-```powershell
-.\venv\Scripts\python.exe -m pip install ragas datasets
+For Docker:
+
+```bash
+docker compose down -v
+docker compose up -d --build
 ```
+
+## Future Improvements
+
+- Add real payment gateway integration.
+- Add WhatsApp/SMS ticket delivery.
+- Add PostgreSQL for production.
+- Add hybrid BM25 + vector search with RRF if semantic MMR retrieval becomes insufficient.
+- Add multilingual UI toggle.
+- Add live operator inventory integration.
 
 ## License
 
