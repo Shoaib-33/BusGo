@@ -1,0 +1,476 @@
+{
+  "schema_version": "1.0",
+  "project": "BusGo",
+  "purpose": "Golden regression dataset for BusGo AI assistant, RAG answers, booking flow, seat selection, cancellation, and no-hallucination checks.",
+  "source_files": [
+    "data.json",
+    "holiday_calendar.json",
+    "attachment/*.txt"
+  ],
+  "evaluation_guidance": {
+    "matching": "Use case-insensitive substring checks for must_contain and must_not_contain. For numeric values, compare exact numbers where possible.",
+    "rag_rule": "The assistant must answer only from project data and attachment policy files.",
+    "booking_rule": "The assistant must not save a booking until required fields are present and, for chatbot booking, seat selection has been confirmed.",
+    "language_rule": "If user writes Banglish, the assistant should usually reply in natural Banglish while keeping provider, route, fare, date, and seat values exact."
+  },
+  "cases": [
+    {
+      "id": "route_dhaka_rangpur_cheapest_banglish",
+      "category": "route_fare",
+      "type": "single_turn",
+      "messages": [
+        "dhaka theke rangpur er kom dam e ticket dorkar"
+      ],
+      "expected": {
+        "must_contain": ["National Travels", "Non-AC", "480", "07:00", "18:00"],
+        "must_not_contain": ["Eid", "holiday package", "Desh Travel sobcheye kom"],
+        "language": "banglish",
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "route_dhaka_rangpur_ac_times",
+      "category": "route_fare",
+      "type": "single_turn",
+      "messages": [
+        "dhaka theke rangpur e AC bus ase and time kokhon?"
+      ],
+      "expected": {
+        "must_contain": ["Desh Travel", "750", "08:30", "23:00", "National Travels", "720", "10:00", "22:00"],
+        "must_not_contain": ["Eid", "holiday package", "booking korte chan"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "route_rangpur_dhaka_cheapest",
+      "category": "route_fare",
+      "type": "single_turn",
+      "messages": [
+        "Rangpur to Dhaka cheapest bus?"
+      ],
+      "expected": {
+        "must_contain": ["National Travels", "Non-AC", "480", "07:00", "18:00"],
+        "must_not_contain": ["Desh Travel is cheapest", "No providers"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "route_dhaka_chattogram_cheapest",
+      "category": "route_fare",
+      "type": "single_turn",
+      "messages": [
+        "what is the cheapest bus from dhaka to chattogram?"
+      ],
+      "expected": {
+        "must_contain": ["Shyamoli Paribahan", "Non-AC", "480", "05:00", "10:00", "16:00"],
+        "must_not_contain": ["Desh Travel cheapest", "600"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "route_dhaka_cox_ac_cheapest",
+      "category": "route_fare",
+      "type": "single_turn",
+      "messages": [
+        "amar ticket lagbe dhaka theke coxbazar. Kom dam e ac bus kon jay?"
+      ],
+      "expected": {
+        "must_contain": ["Shyamoli Paribahan", "AC", "1200", "07:30", "21:00", "23:30"],
+        "must_not_contain": ["Royal Coach cheapest", "1800"],
+        "language": "banglish"
+      }
+    },
+    {
+      "id": "route_dhaka_rajshahi_under_500",
+      "category": "route_fare",
+      "type": "single_turn",
+      "messages": [
+        "Buses from Dhaka to Rajshahi under 500 taka?"
+      ],
+      "expected": {
+        "must_contain": ["Soudia", "400", "National Travels", "420"],
+        "must_not_contain": ["Green Line", "650", "900"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "route_sylhet_chattogram_no_direct",
+      "category": "route_fare",
+      "type": "single_turn",
+      "messages": [
+        "Sylhet theke Chattogram er bus ase?"
+      ],
+      "expected": {
+        "must_contain_any": ["No scheduled service", "no direct", "I don't have that information"],
+        "must_not_contain": ["Ena", "600", "Muradpur"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "route_reverse_chattogram_sylhet_available",
+      "category": "route_fare",
+      "type": "single_turn",
+      "messages": [
+        "Chattogram theke Sylhet e kon bus ase?"
+      ],
+      "expected": {
+        "must_contain_any": ["Chattogram", "Sylhet"],
+        "must_not_contain": ["Sylhet to Chattogram"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "policy_ena_privacy",
+      "category": "policy_rag",
+      "type": "single_turn",
+      "messages": [
+        "What is Ena Paribahan's privacy policy?"
+      ],
+      "expected": {
+        "must_contain": ["Ena", "personal details", "phone numbers", "travel history", "StarNet", "01760-737650", "01619-737650"],
+        "must_not_contain": ["Hanif", "Green Line", "Desh Travel"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "policy_hanif_contact",
+      "category": "policy_rag",
+      "type": "single_turn",
+      "messages": [
+        "Hanif er contact details dao"
+      ],
+      "expected": {
+        "must_contain": ["Hanif", "16460", "01713-049540", "Gabtoli"],
+        "must_not_contain": ["01760-737650", "StarNet", "Green Line"],
+        "language": "banglish",
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "policy_green_line_contact",
+      "category": "policy_rag",
+      "type": "single_turn",
+      "messages": [
+        "Green Line contact and address?"
+      ],
+      "expected": {
+        "must_contain": ["Green Line", "9/2", "Outer Circular Road", "Rajarbagh", "02 8315380", "09613316557"],
+        "must_not_contain": ["Hanif", "Ena", "Shyamoli"]
+      }
+    },
+    {
+      "id": "policy_specific_refund_missing",
+      "category": "policy_rag",
+      "type": "single_turn",
+      "messages": [
+        "Ena bus ki refund kore?"
+      ],
+      "expected": {
+        "must_contain_any": ["specific refund", "refund information", "I don't have"],
+        "must_contain": ["Ena"],
+        "must_not_contain": ["100% refund", "50% refund", "Hanif"]
+      }
+    },
+    {
+      "id": "booking_chat_ready_then_seat_ui",
+      "category": "booking_flow",
+      "type": "multi_turn",
+      "messages": [
+        "dhaka theke rangpur er kom dam e ticket dorkar",
+        "ok ami jete chacchi 7 tay name Shoaib mobile 01309183295 3 jon",
+        "28 tarikh may month er"
+      ],
+      "expected": {
+        "before_seat_confirm": {
+          "must_contain_any": ["seat", "seat picker", "select"],
+          "response_json_must_include": ["seat_selection"],
+          "seat_selection_must_contain": {
+            "provider": "National Travels",
+            "from_district": "Dhaka",
+            "to_district": "Rangpur",
+            "bus_type": "Non-AC",
+            "departure_time": "07:00",
+            "num_passengers": 3,
+            "fare": 600,
+            "total_amount": 1800
+          },
+          "booking_should_be_created": false
+        },
+        "after_seat_confirm": {
+          "selected_seats": ["A2", "B2", "C2"],
+          "must_contain": ["Booking ID", "National Travels", "Dhaka", "Rangpur", "2026-05-28", "07:00", "A2", "B2", "C2", "1800"],
+          "db_assertions": {
+            "status": "active",
+            "phone": "01309183295",
+            "name": "Shoaib",
+            "seat_numbers": "A2, B2, C2",
+            "fare": 600,
+            "total_amount": 1800
+          }
+        }
+      }
+    },
+    {
+      "id": "booking_chat_missing_name_phone",
+      "category": "booking_flow",
+      "type": "multi_turn",
+      "messages": [
+        "amar dhaka theke rangpur ticket lagbe",
+        "3 jon jabo 11 june 2026"
+      ],
+      "expected": {
+        "must_contain_any": ["name", "nam", "phone", "mobile"],
+        "must_not_contain": ["Booking ID", "confirmed"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "booking_chat_total_fare_question_before_confirm",
+      "category": "booking_flow",
+      "type": "multi_turn",
+      "messages": [
+        "amar ticket lagbe dhaka theke coxbazar kom dam e ac bus",
+        "7:30 e jete chacchi 3 jon. jabo 11 june 2026",
+        "total ticket fare koto porbe 3 jon"
+      ],
+      "expected": {
+        "must_contain": ["4140"],
+        "must_contain_any": ["1380", "15%", "holiday"],
+        "must_not_contain": ["3600", "Booking ID", "confirmed"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "booking_chat_seat_numbers_typed",
+      "category": "booking_flow",
+      "type": "multi_turn",
+      "messages": [
+        "I want to book Dhaka to Rajshahi cheapest ticket",
+        "Name is Rahim phone 01711111111 2 passengers date 2026-12-31",
+        "A2 B2"
+      ],
+      "expected": {
+        "must_contain": ["Booking ID", "Soudia", "Dhaka", "Rajshahi", "A2", "B2", "800"],
+        "db_assertions": {
+          "bus_provider": "Soudia",
+          "fare": 400,
+          "total_amount": 800,
+          "seat_numbers": "A2, B2"
+        }
+      }
+    },
+    {
+      "id": "booking_holiday_may_28_surcharge",
+      "category": "holiday_fare",
+      "type": "multi_turn",
+      "messages": [
+        "Book Dhaka to Rangpur National Travels Non-AC 07:00",
+        "Name Test User phone 01888888888 1 passenger date 2026-05-28",
+        "A2"
+      ],
+      "expected": {
+        "must_contain": ["Booking ID", "600", "A2"],
+        "must_contain_any": ["Demo Holiday", "25%", "surcharge"],
+        "db_assertions": {
+          "fare": 600,
+          "total_amount": 600,
+          "seat_numbers": "A2"
+        }
+      }
+    },
+    {
+      "id": "booking_holiday_june_11_surcharge",
+      "category": "holiday_fare",
+      "type": "multi_turn",
+      "messages": [
+        "Book Dhaka to Cox's Bazar Shyamoli AC 07:30",
+        "Name Karim phone 01722222222 3 passengers date 2026-06-11",
+        "A2 B2 C2"
+      ],
+      "expected": {
+        "must_contain": ["Booking ID", "Shyamoli Paribahan", "4140", "A2", "B2", "C2"],
+        "must_contain_any": ["Demo Long Weekend", "15%", "surcharge"],
+        "db_assertions": {
+          "fare": 1380,
+          "total_amount": 4140,
+          "seat_numbers": "A2, B2, C2"
+        }
+      }
+    },
+    {
+      "id": "seat_double_booking_rejected",
+      "category": "seat_selection",
+      "type": "stateful",
+      "setup": {
+        "create_booking": {
+          "provider": "National Travels",
+          "from_district": "Dhaka",
+          "to_district": "Rangpur",
+          "travel_date": "2026-12-31",
+          "bus_type": "Non-AC",
+          "departure_time": "07:00",
+          "seat_numbers": ["A2"]
+        }
+      },
+      "messages": [
+        "Book Dhaka to Rangpur National Travels Non-AC 07:00",
+        "Name Another User phone 01911111111 1 passenger date 2026-12-31",
+        "A2"
+      ],
+      "expected": {
+        "must_contain_any": ["already booked", "not available"],
+        "must_not_contain": ["Booking ID"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "seat_ui_payload_shape",
+      "category": "seat_selection",
+      "type": "api",
+      "endpoint": "/seat-layout",
+      "params": {
+        "provider": "National Travels",
+        "from_district": "Dhaka",
+        "to_district": "Rangpur",
+        "travel_date": "2026-12-31",
+        "bus_type": "Non-AC",
+        "departure_time": "07:00"
+      },
+      "expected": {
+        "json_must_equal": {
+          "capacity": 40
+        },
+        "json_must_contain_path_values": {
+          "rows[0][0].label": "A1",
+          "rows[0][0].is_female_reserved": true,
+          "rows[0][0].is_window": true,
+          "rows[0][1].label": "B1",
+          "rows[0][2].label": "C1",
+          "rows[0][3].label": "D1"
+        }
+      }
+    },
+    {
+      "id": "lookup_booking_by_phone",
+      "category": "booking_lookup",
+      "type": "stateful",
+      "setup": {
+        "create_booking": {
+          "name": "Lookup User",
+          "phone": "01733333333",
+          "provider": "Soudia",
+          "from_district": "Dhaka",
+          "to_district": "Rajshahi",
+          "travel_date": "2026-12-31",
+          "bus_type": "Non-AC",
+          "departure_time": "06:00",
+          "seat_numbers": ["A2"],
+          "fare": 400,
+          "total_amount": 400
+        }
+      },
+      "messages": [
+        "amar mobile number e kono booking ase kina check kore dekhben?",
+        "01733333333"
+      ],
+      "expected": {
+        "must_contain": ["Booking ID", "Dhaka", "Rajshahi", "Soudia", "2026-12-31", "400", "active"],
+        "must_not_contain": ["No bookings found"]
+      }
+    },
+    {
+      "id": "cancel_single_active_booking",
+      "category": "cancellation",
+      "type": "stateful",
+      "setup": {
+        "create_booking": {
+          "name": "Cancel User",
+          "phone": "01744444444",
+          "provider": "Soudia",
+          "from_district": "Dhaka",
+          "to_district": "Rajshahi",
+          "travel_date": "2026-12-31",
+          "bus_type": "Non-AC",
+          "departure_time": "06:00",
+          "seat_numbers": ["B2"],
+          "fare": 400,
+          "total_amount": 400
+        }
+      },
+      "messages": [
+        "cancel my booking",
+        "01744444444"
+      ],
+      "expected": {
+        "must_contain": ["cancelled"],
+        "db_assertions": {
+          "status": "cancelled"
+        }
+      }
+    },
+    {
+      "id": "no_hallucinated_holiday_for_normal_route",
+      "category": "hallucination",
+      "type": "single_turn",
+      "messages": [
+        "Dhaka theke Rangpur e normal bus time bolo"
+      ],
+      "expected": {
+        "must_contain_any": ["06:00", "07:00", "14:00", "18:00", "21:00"],
+        "must_not_contain": ["Eid", "holiday", "surcharge", "special package"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "no_mixed_provider_policy",
+      "category": "hallucination",
+      "type": "single_turn",
+      "messages": [
+        "Shyamoli er privacy policy and contact bolo"
+      ],
+      "expected": {
+        "must_contain": ["Shyamoli", "27/ka", "01908899544", "01908899522", "01908899499"],
+        "must_not_contain": ["Ena", "Hanif", "01760-737650", "16460"]
+      }
+    },
+    {
+      "id": "phone_only_should_not_book_without_context",
+      "category": "safety",
+      "type": "single_turn",
+      "messages": [
+        "01309183295"
+      ],
+      "expected": {
+        "must_not_contain": ["Booking ID", "confirmed"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "name_date_passenger_not_name_confusion",
+      "category": "safety",
+      "type": "multi_turn",
+      "messages": [
+        "I want a cheap ticket from Rangpur to Dhaka",
+        "ami jabo 11 june 2026 e 3 jon"
+      ],
+      "expected": {
+        "must_contain_any": ["name", "nam", "phone", "mobile"],
+        "must_not_contain": ["Passenger: ami jabo", "Booking ID", "confirmed"],
+        "booking_should_be_created": false
+      }
+    },
+    {
+      "id": "formatted_policy_output",
+      "category": "ui_formatting",
+      "type": "single_turn",
+      "messages": [
+        "Ena Paribahan er policy bolo"
+      ],
+      "expected": {
+        "assistant_text_may_contain_markdown": true,
+        "ui_should_render": ["strong", "ul", "li"],
+        "raw_markdown_should_not_be_visible": ["**Data Collection:**", "* **Data Collection:**"]
+      }
+    }
+  ]
+}

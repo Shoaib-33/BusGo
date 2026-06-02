@@ -1,0 +1,20 @@
+{
+  "holidays": [
+    {
+      "name": "Demo Holiday",
+      "type": "test",
+      "start_date": "2026-05-28",
+      "end_date": "2026-05-30",
+      "surcharge_percent": 25,
+      "note": "Demo rule for testing holiday fare calculation. Replace this with real Eid or holiday dates later."
+    },
+    {
+      "name": "Demo Long Weekend",
+      "type": "test",
+      "start_date": "2026-06-10",
+      "end_date": "2026-06-12",
+      "surcharge_percent": 15,
+      "note": "Second demo window to test multiple holiday ranges."
+    }
+  ]
+}

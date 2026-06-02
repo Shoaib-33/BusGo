@@ -19,6 +19,41 @@ async function checkStatus() {
 }
 checkStatus();
 
+// ===== Auth Status =====
+async function checkAuthStatus() {
+    const link = document.getElementById('authNavLink');
+    const dashboardLink = document.getElementById('dashboardNavLink');
+    const adminLink = document.getElementById('adminNavLink');
+    if (!link) return;
+    try {
+        const res = await fetch('/auth/me', { signal: AbortSignal.timeout(2000) });
+        const data = await res.json();
+        if (data.authenticated && data.user) {
+            if (adminLink && data.user.role === 'admin') adminLink.classList.remove('hidden');
+            link.textContent = 'Logout';
+            link.href = '#';
+            link.title = `Logged in as ${data.user.name || data.user.phone}`;
+            link.onclick = (event) => {
+                event.preventDefault();
+                logout();
+            };
+        }
+    } catch {}
+}
+checkAuthStatus();
+
+async function logout() {
+    try {
+        await fetch('/auth/logout', {
+            method: 'POST',
+            credentials: 'same-origin'
+        });
+        location.href = '/login-page';
+    } catch {
+        location.href = '/login-page';
+    }
+}
+
 // ===== Toast Notifications =====
 function showToast(message, type = 'success') {
     const existing = document.querySelector('.toast');

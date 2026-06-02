@@ -1,0 +1,102 @@
+[
+  {
+    "id": "route_dhaka_rangpur_cheapest",
+    "user_input": "dhaka theke rangpur er cheapest bus konta?",
+    "reference": "National Travels Non-AC is the cheapest listed Dhaka to Rangpur service. Fare is 480 Taka and departure times are 07:00 and 18:00."
+  },
+  {
+    "id": "route_dhaka_rangpur_ac_times",
+    "user_input": "dhaka theke rangpur e AC bus ase and time kokhon?",
+    "reference": "Dhaka to Rangpur AC services are Desh Travel AC for 750 Taka at 08:30 and 23:00, and National Travels AC for 720 Taka at 10:00 and 22:00."
+  },
+  {
+    "id": "route_rangpur_dhaka_cheapest",
+    "user_input": "Rangpur to Dhaka cheapest bus?",
+    "reference": "National Travels Non-AC is the cheapest listed Rangpur to Dhaka service. Fare is 480 Taka and departure times are 07:00 and 18:00."
+  },
+  {
+    "id": "route_dhaka_chattogram_cheapest",
+    "user_input": "what is the cheapest bus from dhaka to chattogram?",
+    "reference": "Shyamoli Paribahan Non-AC is the cheapest listed Dhaka to Chattogram service. Fare is 480 Taka and departure times are 05:00, 10:00, and 16:00."
+  },
+  {
+    "id": "route_dhaka_coxbazar_ac_cheapest",
+    "user_input": "amar ticket lagbe dhaka theke coxbazar. Kom dam e ac bus kon jay?",
+    "reference": "For Dhaka to Cox's Bazar, the cheapest AC service is Shyamoli Paribahan AC at 1200 Taka. Departure times are 07:30, 21:00, and 23:30."
+  },
+  {
+    "id": "route_dhaka_rajshahi_under_500",
+    "user_input": "Buses from Dhaka to Rajshahi under 500 taka?",
+    "reference": "Dhaka to Rajshahi services under 500 Taka include Soudia Non-AC for 400 Taka at 06:00, 10:30, and 16:30, and National Travels Non-AC for 420 Taka at 07:00 and 14:00."
+  },
+  {
+    "id": "route_dhaka_sylhet_cheapest",
+    "user_input": "Dhaka to Sylhet cheapest bus and time?",
+    "reference": "The cheapest listed Dhaka to Sylhet service is S.A. Paribahan Non-AC for 450 Taka, with departure times 06:00, 09:00, and 15:00."
+  },
+  {
+    "id": "route_dhaka_barishal_cheapest",
+    "user_input": "Dhaka theke Barishal cheapest bus konta?",
+    "reference": "For Dhaka to Barishal, Soudia Non-AC is listed at 380 Taka, with departure times 06:00, 13:30, and 19:30."
+  },
+  {
+    "id": "route_chattogram_coxbazar_cheapest",
+    "user_input": "Chattogram to Cox's Bazar cheapest bus?",
+    "reference": "The cheapest listed Chattogram to Cox's Bazar service is Shyamoli Paribahan Non-AC for 280 Taka, with departure times 05:00, 09:00, and 16:00."
+  },
+  {
+    "id": "route_dhaka_mymensingh_cheapest",
+    "user_input": "Dhaka to Mymensingh lowest fare bus?",
+    "reference": "The lowest listed Dhaka to Mymensingh fare is Tk Enterprise Non-AC for 160 Taka, with departure times 06:30, 08:30, 11:30, 14:30, and 17:30."
+  },
+  {
+    "id": "policy_ena_privacy",
+    "user_input": "What is Ena Paribahan's privacy policy?",
+    "reference": "Ena Paribahan collects personal details such as names, phone numbers, travel history, and booking preferences. It stores information securely with limited authorized access, shares information only for legal or operational needs, uses security protocols such as encryption and audits, and lists StarNet, Plot 97/A, 2nd Floor, Road-7, Sector-4, Uttara C/A, Dhaka-1230 with Mohakhali contacts 01760-737650 and 01619-737650."
+  },
+  {
+    "id": "policy_hanif_contact",
+    "user_input": "Hanif er contact details dao",
+    "reference": "Hanif Enterprise contact details include helpline 16460, Gabtoli counter 01713-049540, official address 1/1 Mirpur Road, Gabtoli Bus Terminal, Dhaka-1216, and email info@hanifenterprise.com."
+  },
+  {
+    "id": "policy_green_line_contact",
+    "user_input": "Green Line contact and address?",
+    "reference": "Green Line address is 9/2, Outer Circular Road, Momen Bagh, Rajarbagh, Dhaka 1217. Contact numbers include +88 02 8315380 and call center mobile 09613316557."
+  },
+  {
+    "id": "policy_shyamoli_contact",
+    "user_input": "Shyamoli er contact bolo",
+    "reference": "Shyamoli Paribahan contact information includes Dhaka counters at 27/ka Shyamoli, Mirpur Road and 01908899544, 01908899522, 01908899499."
+  },
+  {
+    "id": "policy_ena_refund_specific",
+    "user_input": "Ena bus ki refund kore?",
+    "reference": "If specific Ena refund information is not present in the retrieved policy context, the assistant should say it does not have specific refund policy details and provide available Ena contact information rather than inventing refund terms."
+  },
+  {
+    "id": "provider_national_policy",
+    "user_input": "National Travels cancellation and refund policy ki?",
+    "reference": "National Travels cancellation is allowed up to 6 hours before departure with a 20% charge. Refund is via bKash or bank within 5 business days."
+  },
+  {
+    "id": "provider_desh_policy",
+    "user_input": "Desh Travel refund policy and contact?",
+    "reference": "Desh Travel refund is processed within 3-5 business days via bKash or bank transfer. Contact includes phone 01711-123456, email support@deshtravel.com.bd, and address Gabtoli Bus Terminal, Dhaka."
+  },
+  {
+    "id": "route_no_direct_sylhet_chattogram",
+    "user_input": "Sylhet theke Chattogram er direct bus ase?",
+    "reference": "No scheduled direct service is listed for Sylhet to Chattogram in that exact direction. The listed reverse direction is Chattogram to Sylhet."
+  },
+  {
+    "id": "route_chattogram_sylhet_available",
+    "user_input": "Chattogram theke Sylhet e kon bus ase?",
+    "reference": "Chattogram to Sylhet has Ena Paribahan and Desh Travel. Ena Paribahan Non-AC is 500 Taka at 06:30 and 13:00, Ena AC is 775 Taka at 08:00 and 21:30, Desh Travel Non-AC is 480 Taka at 06:00 and 14:00, and Desh Travel AC is 720 Taka at 08:30 and 21:00."
+  },
+  {
+    "id": "route_dhaka_tangail_cheapest",
+    "user_input": "Dhaka to Tangail cheapest service?",
+    "reference": "The cheapest listed Dhaka to Tangail service is Tk Enterprise Non-AC for 140 Taka, with departure times 06:30, 08:30, 11:30, 14:30, and 17:30."
+  }
+]

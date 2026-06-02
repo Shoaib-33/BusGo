@@ -3,101 +3,2499 @@
     {
       "name": "Dhaka",
       "dropping_points": [
-        {"name": "Gabtoli", "price": 500},
-        {"name": "Mohakhali", "price": 550},
-        {"name": "Sayedabad", "price": 520}
+        {
+          "name": "Gabtoli",
+          "price": 500
+        },
+        {
+          "name": "Mohakhali",
+          "price": 550
+        },
+        {
+          "name": "Sayedabad",
+          "price": 520
+        },
+        {
+          "name": "Abdullahpur",
+          "price": 510
+        },
+        {
+          "name": "Mirpur DOHS",
+          "price": 530
+        }
       ]
     },
     {
       "name": "Chattogram",
       "dropping_points": [
-        {"name": "Muradpur", "price": 600},
-        {"name": "Agrabad", "price": 650},
-        {"name": "Kaptai", "price": 620}
+        {
+          "name": "Muradpur",
+          "price": 600
+        },
+        {
+          "name": "Agrabad",
+          "price": 650
+        },
+        {
+          "name": "Kaptai",
+          "price": 620
+        },
+        {
+          "name": "Oxygen",
+          "price": 610
+        },
+        {
+          "name": "Bahaddarhat",
+          "price": 590
+        }
       ]
     },
     {
       "name": "Khulna",
       "dropping_points": [
-        {"name": "Daulatpur", "price": 400},
-        {"name": "Khalishpur", "price": 420}
+        {
+          "name": "Daulatpur",
+          "price": 400
+        },
+        {
+          "name": "Khalishpur",
+          "price": 420
+        },
+        {
+          "name": "Sonadanga",
+          "price": 410
+        },
+        {
+          "name": "Rupsa",
+          "price": 430
+        }
       ]
     },
     {
       "name": "Rajshahi",
       "dropping_points": [
-        {"name": "Shah Makhdum", "price": 480},
-        {"name": "Bagha", "price": 500}
+        {
+          "name": "Shah Makhdum",
+          "price": 480
+        },
+        {
+          "name": "Bagha",
+          "price": 500
+        },
+        {
+          "name": "Kazla",
+          "price": 470
+        },
+        {
+          "name": "Talaimari",
+          "price": 460
+        }
       ]
     },
     {
       "name": "Sylhet",
       "dropping_points": [
-        {"name": "Zindabazar", "price": 700},
-        {"name": "Bimanbandar", "price": 720}
+        {
+          "name": "Zindabazar",
+          "price": 700
+        },
+        {
+          "name": "Bimanbandar",
+          "price": 720
+        },
+        {
+          "name": "Ambarkhana",
+          "price": 690
+        },
+        {
+          "name": "Kadamtali",
+          "price": 710
+        }
       ]
     },
     {
       "name": "Barishal",
       "dropping_points": [
-        {"name": "Khanjahan", "price": 450},
-        {"name": "Bakerganj", "price": 470}
+        {
+          "name": "Nathullabad",
+          "price": 450
+        },
+        {
+          "name": "Rupatali",
+          "price": 470
+        },
+        {
+          "name": "Banda Road",
+          "price": 460
+        },
+        {
+          "name": "Kazipara",
+          "price": 440
+        }
       ]
     },
     {
       "name": "Rangpur",
       "dropping_points": [
-        {"name": "Kachari", "price": 480},
-        {"name": "Cantonment", "price": 500}
+        {
+          "name": "Kachari Bazar",
+          "price": 480
+        },
+        {
+          "name": "Cantonment",
+          "price": 500
+        },
+        {
+          "name": "Modern More",
+          "price": 490
+        },
+        {
+          "name": "Dhap",
+          "price": 470
+        }
       ]
     },
     {
       "name": "Mymensingh",
       "dropping_points": [
-        {"name": "Shahbazpur", "price": 460},
-        {"name": "Kewatkhali", "price": 480}
+        {
+          "name": "Shahbazpur",
+          "price": 260
+        },
+        {
+          "name": "Kewatkhali",
+          "price": 280
+        },
+        {
+          "name": "Ganginarpar",
+          "price": 270
+        },
+        {
+          "name": "Chorpara",
+          "price": 260
+        }
       ]
     },
     {
       "name": "Comilla",
       "dropping_points": [
-        {"name": "Kotbari", "price": 530},
-        {"name": "Nangalkot", "price": 550}
+        {
+          "name": "Kotbari",
+          "price": 230
+        },
+        {
+          "name": "Nangalkot",
+          "price": 250
+        },
+        {
+          "name": "Chauddagram",
+          "price": 240
+        },
+        {
+          "name": "Laksam",
+          "price": 220
+        }
       ]
     },
     {
       "name": "Bogra",
       "dropping_points": [
-        {"name": "Shahjahanpur", "price": 470},
-        {"name": "Sariakandi", "price": 490}
+        {
+          "name": "Shahjahanpur",
+          "price": 370
+        },
+        {
+          "name": "Sariakandi",
+          "price": 390
+        },
+        {
+          "name": "Thana Road",
+          "price": 360
+        },
+        {
+          "name": "Kalitola",
+          "price": 380
+        }
+      ]
+    },
+    {
+      "name": "Cox's Bazar",
+      "dropping_points": [
+        {
+          "name": "Kolatoli",
+          "price": 900
+        },
+        {
+          "name": "Laldighirpar",
+          "price": 880
+        },
+        {
+          "name": "Baharchhara",
+          "price": 920
+        },
+        {
+          "name": "Teknaf",
+          "price": 1000
+        }
+      ]
+    },
+    {
+      "name": "Jessore",
+      "dropping_points": [
+        {
+          "name": "Jessore Bus Stand",
+          "price": 350
+        },
+        {
+          "name": "Benapole",
+          "price": 380
+        },
+        {
+          "name": "Chaugachha",
+          "price": 360
+        },
+        {
+          "name": "Monirampur",
+          "price": 340
+        }
+      ]
+    },
+    {
+      "name": "Dinajpur",
+      "dropping_points": [
+        {
+          "name": "Dinajpur Bus Terminal",
+          "price": 550
+        },
+        {
+          "name": "Birampur",
+          "price": 570
+        },
+        {
+          "name": "Phulbari",
+          "price": 560
+        },
+        {
+          "name": "Parbatipur",
+          "price": 540
+        }
+      ]
+    },
+    {
+      "name": "Narayanganj",
+      "dropping_points": [
+        {
+          "name": "Chashara",
+          "price": 80
+        },
+        {
+          "name": "Fatullah",
+          "price": 90
+        },
+        {
+          "name": "Siddhirganj",
+          "price": 85
+        },
+        {
+          "name": "Sonargaon",
+          "price": 100
+        }
+      ]
+    },
+    {
+      "name": "Tangail",
+      "dropping_points": [
+        {
+          "name": "Tangail Bus Stand",
+          "price": 150
+        },
+        {
+          "name": "Mirzapur",
+          "price": 130
+        },
+        {
+          "name": "Gopalpur",
+          "price": 160
+        },
+        {
+          "name": "Basail",
+          "price": 140
+        }
+      ]
+    },
+    {
+      "name": "Jamalpur",
+      "dropping_points": [
+        {
+          "name": "Jamalpur Bus Stand",
+          "price": 300
+        },
+        {
+          "name": "Islampur",
+          "price": 290
+        },
+        {
+          "name": "Sarishabari",
+          "price": 310
+        },
+        {
+          "name": "Dewanganj",
+          "price": 320
+        }
+      ]
+    },
+    {
+      "name": "Faridpur",
+      "dropping_points": [
+        {
+          "name": "Faridpur Bus Stand",
+          "price": 200
+        },
+        {
+          "name": "Bhanga",
+          "price": 210
+        },
+        {
+          "name": "Nagarkanda",
+          "price": 195
+        },
+        {
+          "name": "Boalmari",
+          "price": 205
+        }
+      ]
+    },
+    {
+      "name": "Kushtia",
+      "dropping_points": [
+        {
+          "name": "Kushtia Bus Stand",
+          "price": 380
+        },
+        {
+          "name": "Kumarkhali",
+          "price": 370
+        },
+        {
+          "name": "Khoksa",
+          "price": 360
+        },
+        {
+          "name": "Bheramara",
+          "price": 390
+        }
+      ]
+    },
+    {
+      "name": "Narsingdi",
+      "dropping_points": [
+        {
+          "name": "Narsingdi Bus Stand",
+          "price": 110
+        },
+        {
+          "name": "Shibpur",
+          "price": 120
+        },
+        {
+          "name": "Monohardi",
+          "price": 115
+        },
+        {
+          "name": "Raipura",
+          "price": 125
+        }
+      ]
+    },
+    {
+      "name": "Noakhali",
+      "dropping_points": [
+        {
+          "name": "Maijdee",
+          "price": 310
+        },
+        {
+          "name": "Chowmuhani",
+          "price": 300
+        },
+        {
+          "name": "Sonaimuri",
+          "price": 320
+        },
+        {
+          "name": "Hatiya",
+          "price": 350
+        }
       ]
     }
   ],
   "bus_providers": [
     {
       "name": "Desh Travel",
-      "coverage_districts": ["Dhaka", "Chattogram", "Sylhet", "Rangpur"]
+      "rating": 4.2,
+      "total_reviews": 1240,
+      "cancellation_policy": "Cancellation allowed up to 6 hours before departure. 20% charge applies.",
+      "refund_policy": "Refund processed within 3-5 business days via bKash or bank transfer.",
+      "amenities": [
+        "AC",
+        "WiFi",
+        "USB Charging",
+        "Recliner Seats",
+        "Water Bottle"
+      ],
+      "contact": {
+        "phone": "01711-123456",
+        "email": "support@deshtravel.com.bd",
+        "address": "Gabtoli Bus Terminal, Dhaka"
+      }
     },
     {
-      "name": "Hanif",
-      "coverage_districts": ["Dhaka", "Khulna", "Mymensingh", "Comilla"]
+      "name": "Hanif Enterprise",
+      "rating": 4.5,
+      "total_reviews": 3200,
+      "cancellation_policy": "Free cancellation up to 12 hours before departure. 15% charge within 12 hours.",
+      "refund_policy": "Full refund if cancelled 12+ hours prior. Partial refund (85%) within 12 hours.",
+      "amenities": [
+        "AC",
+        "WiFi",
+        "USB Charging",
+        "Blanket",
+        "Snacks",
+        "Entertainment Screen"
+      ],
+      "contact": {
+        "phone": "01711-654321",
+        "email": "booking@hanifenterprise.com.bd",
+        "address": "Sayedabad Bus Terminal, Dhaka"
+      }
     },
     {
-      "name": "Ena",
-      "coverage_districts": ["Chattogram", "Sylhet", "Barishal", "Bogra"]
+      "name": "Ena Paribahan",
+      "rating": 4.3,
+      "total_reviews": 2100,
+      "cancellation_policy": "Cancellation allowed up to 4 hours before departure. No refund for no-shows.",
+      "refund_policy": "Refund within 5-7 business days. 10% processing fee applies.",
+      "amenities": [
+        "AC",
+        "USB Charging",
+        "Water Bottle",
+        "Reading Light"
+      ],
+      "contact": {
+        "phone": "01819-112233",
+        "email": "info@enaparibahan.com.bd",
+        "address": "Bahaddarhat, Chattogram"
+      }
     },
     {
       "name": "Green Line",
-      "coverage_districts": ["Khulna", "Rajshahi", "Mymensingh", "Rangpur"]
+      "rating": 4.6,
+      "total_reviews": 4100,
+      "cancellation_policy": "Free cancellation up to 24 hours before departure. 25% charge within 24 hours.",
+      "refund_policy": "Full refund for cancellations 24+ hours prior. Partial refund otherwise.",
+      "amenities": [
+        "AC Volvo",
+        "WiFi",
+        "USB Charging",
+        "Blanket",
+        "Pillow",
+        "Meal",
+        "Entertainment Screen",
+        "Recliner Seats"
+      ],
+      "contact": {
+        "phone": "01713-445566",
+        "email": "greenline@greenlineparibahan.com.bd",
+        "address": "Kalyanpur, Dhaka"
+      }
     },
     {
       "name": "Soudia",
-      "coverage_districts": ["Dhaka", "Rajshahi", "Barishal", "Comilla"]
+      "rating": 4.0,
+      "total_reviews": 1800,
+      "cancellation_policy": "Cancellation allowed up to 2 hours before departure. 30% cancellation fee.",
+      "refund_policy": "Refund via original payment method within 7 business days.",
+      "amenities": [
+        "AC",
+        "USB Charging",
+        "Water Bottle"
+      ],
+      "contact": {
+        "phone": "01611-778899",
+        "email": "soudia@soudiaparibahan.com.bd",
+        "address": "Mohakhali Bus Terminal, Dhaka"
+      }
     },
     {
-      "name": "Shyamoli",
-      "coverage_districts": ["Chattogram", "Khulna", "Sylhet", "Bogra"]
+      "name": "Shyamoli Paribahan",
+      "rating": 4.4,
+      "total_reviews": 3500,
+      "cancellation_policy": "Free cancellation up to 8 hours before departure. 20% fee after that.",
+      "refund_policy": "Refund within 3 business days for online bookings.",
+      "amenities": [
+        "AC",
+        "WiFi",
+        "USB Charging",
+        "Blanket",
+        "Recliner Seats",
+        "Reading Light"
+      ],
+      "contact": {
+        "phone": "01712-334455",
+        "email": "booking@shyamoliparibahan.com.bd",
+        "address": "Kalyanpur, Dhaka"
+      }
+    },
+    {
+      "name": "S.A. Paribahan",
+      "rating": 3.9,
+      "total_reviews": 980,
+      "cancellation_policy": "No cancellation allowed within 3 hours of departure.",
+      "refund_policy": "Refund issued within 10 business days.",
+      "amenities": [
+        "AC",
+        "USB Charging"
+      ],
+      "contact": {
+        "phone": "01815-223344",
+        "email": "sa@saparibahan.com.bd",
+        "address": "Sayedabad, Dhaka"
+      }
+    },
+    {
+      "name": "Royal Coach",
+      "rating": 4.7,
+      "total_reviews": 2200,
+      "cancellation_policy": "Free cancellation up to 48 hours before departure. No refund within 48 hours.",
+      "refund_policy": "Full refund if cancelled 48+ hours prior. No refund otherwise.",
+      "amenities": [
+        "AC Volvo",
+        "WiFi",
+        "USB Charging",
+        "Blanket",
+        "Pillow",
+        "Meal",
+        "Entertainment Screen",
+        "Private Curtain",
+        "Recliner/Flat Seats"
+      ],
+      "contact": {
+        "phone": "01911-556677",
+        "email": "royal@royalcoachbd.com",
+        "address": "Mohakhali, Dhaka"
+      }
+    },
+    {
+      "name": "Tk Enterprise",
+      "rating": 3.8,
+      "total_reviews": 760,
+      "cancellation_policy": "Cancellation allowed up to 1 hour before departure. 25% fee applies.",
+      "refund_policy": "Cash refund at terminal or bKash within 5 business days.",
+      "amenities": [
+        "AC",
+        "USB Charging",
+        "Water Bottle"
+      ],
+      "contact": {
+        "phone": "01718-990011",
+        "email": "tk@tkenterprise.com.bd",
+        "address": "Abdullahpur, Dhaka"
+      }
+    },
+    {
+      "name": "National Travels",
+      "rating": 4.1,
+      "total_reviews": 1450,
+      "cancellation_policy": "Cancellation allowed up to 6 hours before departure. 20% charge applies.",
+      "refund_policy": "Refund via bKash or bank within 5 business days.",
+      "amenities": [
+        "AC",
+        "WiFi",
+        "USB Charging",
+        "Water Bottle",
+        "Recliner Seats"
+      ],
+      "contact": {
+        "phone": "01916-112233",
+        "email": "national@nationaltravelsbd.com.bd",
+        "address": "Gabtoli, Dhaka"
+      }
     }
-  ]
+  ],
+  "routes": [
+    {
+      "from": "Dhaka",
+      "to": "Chattogram",
+      "distance_km": 244,
+      "avg_duration_hours": 5.5,
+      "provider_schedules": [
+        {
+          "provider": "Desh Travel",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 500,
+              "departure_times": [
+                "06:00",
+                "11:00",
+                "17:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 750,
+              "departure_times": [
+                "08:30",
+                "21:00",
+                "23:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Royal Coach",
+          "services": [
+            {
+              "bus_type": "AC Volvo",
+              "fare": 1200,
+              "departure_times": [
+                "08:00",
+                "22:30"
+              ]
+            },
+            {
+              "bus_type": "Sleeper",
+              "fare": 1500,
+              "departure_times": [
+                "20:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Shyamoli Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 480,
+              "departure_times": [
+                "05:00",
+                "10:00",
+                "16:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 720,
+              "departure_times": [
+                "07:30",
+                "19:00",
+                "23:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Sylhet",
+      "distance_km": 240,
+      "avg_duration_hours": 5.0,
+      "provider_schedules": [
+        {
+          "provider": "Desh Travel",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 480,
+              "departure_times": [
+                "06:00",
+                "11:00",
+                "17:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 720,
+              "departure_times": [
+                "08:30",
+                "21:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "S.A. Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 450,
+              "departure_times": [
+                "06:00",
+                "09:00",
+                "15:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 630,
+              "departure_times": [
+                "12:00",
+                "21:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Khulna",
+      "distance_km": 333,
+      "avg_duration_hours": 8.0,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 550,
+              "departure_times": [
+                "07:00",
+                "12:00",
+                "20:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 880,
+              "departure_times": [
+                "09:00",
+                "22:00"
+              ]
+            },
+            {
+              "bus_type": "Sleeper",
+              "fare": 1100,
+              "departure_times": [
+                "22:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Green Line",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 520,
+              "departure_times": [
+                "07:00",
+                "12:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 884,
+              "departure_times": [
+                "09:30",
+                "22:00"
+              ]
+            },
+            {
+              "bus_type": "AC Volvo",
+              "fare": 1200,
+              "departure_times": [
+                "15:30"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Royal Coach",
+          "services": [
+            {
+              "bus_type": "AC Volvo",
+              "fare": 1300,
+              "departure_times": [
+                "08:00",
+                "22:30"
+              ]
+            },
+            {
+              "bus_type": "Sleeper",
+              "fare": 1600,
+              "departure_times": [
+                "20:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Rajshahi",
+      "distance_km": 253,
+      "avg_duration_hours": 6.0,
+      "provider_schedules": [
+        {
+          "provider": "Soudia",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 400,
+              "departure_times": [
+                "06:00",
+                "10:30",
+                "16:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 580,
+              "departure_times": [
+                "08:00",
+                "19:30",
+                "22:30"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "National Travels",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 420,
+              "departure_times": [
+                "07:00",
+                "14:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 630,
+              "departure_times": [
+                "10:00",
+                "22:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Green Line",
+          "services": [
+            {
+              "bus_type": "AC",
+              "fare": 650,
+              "departure_times": [
+                "09:30",
+                "18:30"
+              ]
+            },
+            {
+              "bus_type": "AC Volvo",
+              "fare": 900,
+              "departure_times": [
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Barishal",
+      "distance_km": 197,
+      "avg_duration_hours": 5.0,
+      "provider_schedules": [
+        {
+          "provider": "Soudia",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 380,
+              "departure_times": [
+                "06:00",
+                "13:30",
+                "19:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 551,
+              "departure_times": [
+                "08:00",
+                "22:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Rangpur",
+      "distance_km": 300,
+      "avg_duration_hours": 7.5,
+      "provider_schedules": [
+        {
+          "provider": "Desh Travel",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 500,
+              "departure_times": [
+                "06:00",
+                "14:00",
+                "21:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 750,
+              "departure_times": [
+                "08:30",
+                "23:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "National Travels",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 480,
+              "departure_times": [
+                "07:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 720,
+              "departure_times": [
+                "10:00",
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Mymensingh",
+      "distance_km": 120,
+      "avg_duration_hours": 2.5,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 180,
+              "departure_times": [
+                "07:00",
+                "09:00",
+                "12:00",
+                "15:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 288,
+              "departure_times": [
+                "08:00",
+                "13:00",
+                "20:30"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "S.A. Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 170,
+              "departure_times": [
+                "06:00",
+                "10:00",
+                "14:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 238,
+              "departure_times": [
+                "09:00",
+                "21:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Tk Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 160,
+              "departure_times": [
+                "06:30",
+                "08:30",
+                "11:30",
+                "14:30",
+                "17:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 216,
+              "departure_times": [
+                "20:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Comilla",
+      "distance_km": 91,
+      "avg_duration_hours": 2.0,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 200,
+              "departure_times": [
+                "06:00",
+                "09:00",
+                "12:00",
+                "15:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 320,
+              "departure_times": [
+                "08:00",
+                "14:00",
+                "20:30"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Soudia",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 190,
+              "departure_times": [
+                "06:00",
+                "10:30",
+                "16:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 276,
+              "departure_times": [
+                "08:00",
+                "22:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Cox's Bazar",
+      "distance_km": 396,
+      "avg_duration_hours": 10.0,
+      "provider_schedules": [
+        {
+          "provider": "Royal Coach",
+          "services": [
+            {
+              "bus_type": "AC Volvo",
+              "fare": 1400,
+              "departure_times": [
+                "08:00",
+                "20:00"
+              ]
+            },
+            {
+              "bus_type": "Sleeper",
+              "fare": 1800,
+              "departure_times": [
+                "22:30"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Shyamoli Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 800,
+              "departure_times": [
+                "05:00",
+                "13:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 1200,
+              "departure_times": [
+                "07:30",
+                "21:00",
+                "23:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Bogra",
+      "distance_km": 197,
+      "avg_duration_hours": 5.0,
+      "provider_schedules": [
+        {
+          "provider": "National Travels",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 350,
+              "departure_times": [
+                "07:00",
+                "14:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 525,
+              "departure_times": [
+                "10:00",
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Jessore",
+      "distance_km": 270,
+      "avg_duration_hours": 6.5,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 400,
+              "departure_times": [
+                "07:00",
+                "12:00",
+                "20:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 640,
+              "departure_times": [
+                "09:00",
+                "22:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Green Line",
+          "services": [
+            {
+              "bus_type": "AC",
+              "fare": 660,
+              "departure_times": [
+                "09:30",
+                "18:30"
+              ]
+            },
+            {
+              "bus_type": "AC Volvo",
+              "fare": 950,
+              "departure_times": [
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Dinajpur",
+      "distance_km": 376,
+      "avg_duration_hours": 8.5,
+      "provider_schedules": [
+        {
+          "provider": "Desh Travel",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 550,
+              "departure_times": [
+                "06:00",
+                "17:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 825,
+              "departure_times": [
+                "21:00",
+                "23:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "National Travels",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 530,
+              "departure_times": [
+                "07:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 795,
+              "departure_times": [
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Narayanganj",
+      "distance_km": 16,
+      "avg_duration_hours": 0.5,
+      "provider_schedules": [
+        {
+          "provider": "Tk Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 50,
+              "departure_times": [
+                "06:30",
+                "08:30",
+                "11:30",
+                "14:30",
+                "17:30",
+                "20:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Tangail",
+      "distance_km": 87,
+      "avg_duration_hours": 2.0,
+      "provider_schedules": [
+        {
+          "provider": "Soudia",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 150,
+              "departure_times": [
+                "06:00",
+                "10:30",
+                "16:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 218,
+              "departure_times": [
+                "08:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Tk Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 140,
+              "departure_times": [
+                "06:30",
+                "08:30",
+                "11:30",
+                "14:30",
+                "17:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Jamalpur",
+      "distance_km": 157,
+      "avg_duration_hours": 3.5,
+      "provider_schedules": [
+        {
+          "provider": "Soudia",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 250,
+              "departure_times": [
+                "06:00",
+                "13:30",
+                "19:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 363,
+              "departure_times": [
+                "08:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Tk Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 230,
+              "departure_times": [
+                "06:30",
+                "11:30",
+                "17:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Faridpur",
+      "distance_km": 150,
+      "avg_duration_hours": 3.5,
+      "provider_schedules": [
+        {
+          "provider": "Soudia",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 220,
+              "departure_times": [
+                "06:00",
+                "13:30",
+                "19:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 319,
+              "departure_times": [
+                "08:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Tk Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 200,
+              "departure_times": [
+                "06:30",
+                "11:30",
+                "17:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Kushtia",
+      "distance_km": 215,
+      "avg_duration_hours": 5.0,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 380,
+              "departure_times": [
+                "07:00",
+                "12:00",
+                "20:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 608,
+              "departure_times": [
+                "09:00",
+                "22:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Green Line",
+          "services": [
+            {
+              "bus_type": "AC",
+              "fare": 630,
+              "departure_times": [
+                "09:30",
+                "18:30"
+              ]
+            },
+            {
+              "bus_type": "AC Volvo",
+              "fare": 900,
+              "departure_times": [
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Narsingdi",
+      "distance_km": 57,
+      "avg_duration_hours": 1.5,
+      "provider_schedules": [
+        {
+          "provider": "Soudia",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 100,
+              "departure_times": [
+                "06:00",
+                "10:30",
+                "16:30",
+                "19:30"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "S.A. Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 95,
+              "departure_times": [
+                "06:00",
+                "09:00",
+                "15:00",
+                "18:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dhaka",
+      "to": "Noakhali",
+      "distance_km": 170,
+      "avg_duration_hours": 4.0,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 280,
+              "departure_times": [
+                "07:00",
+                "12:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 448,
+              "departure_times": [
+                "09:00",
+                "22:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "S.A. Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 270,
+              "departure_times": [
+                "06:00",
+                "12:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 378,
+              "departure_times": [
+                "21:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Chattogram",
+      "to": "Cox's Bazar",
+      "distance_km": 152,
+      "avg_duration_hours": 3.5,
+      "provider_schedules": [
+        {
+          "provider": "Ena Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 300,
+              "departure_times": [
+                "06:30",
+                "10:00",
+                "16:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 465,
+              "departure_times": [
+                "08:00",
+                "19:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Shyamoli Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 280,
+              "departure_times": [
+                "05:00",
+                "09:00",
+                "16:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 420,
+              "departure_times": [
+                "07:30",
+                "21:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Royal Coach",
+          "services": [
+            {
+              "bus_type": "AC Volvo",
+              "fare": 700,
+              "departure_times": [
+                "08:00",
+                "14:00"
+              ]
+            },
+            {
+              "bus_type": "Sleeper",
+              "fare": 900,
+              "departure_times": [
+                "22:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Chattogram",
+      "to": "Sylhet",
+      "distance_km": 329,
+      "avg_duration_hours": 7.0,
+      "provider_schedules": [
+        {
+          "provider": "Ena Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 500,
+              "departure_times": [
+                "06:30",
+                "13:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 775,
+              "departure_times": [
+                "08:00",
+                "21:30"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Desh Travel",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 480,
+              "departure_times": [
+                "06:00",
+                "14:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 720,
+              "departure_times": [
+                "08:30",
+                "21:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Sylhet",
+      "to": "Dhaka",
+      "distance_km": 240,
+      "avg_duration_hours": 5.0,
+      "provider_schedules": [
+        {
+          "provider": "Desh Travel",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 480,
+              "departure_times": [
+                "06:00",
+                "11:00",
+                "17:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 720,
+              "departure_times": [
+                "08:30",
+                "21:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "S.A. Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 450,
+              "departure_times": [
+                "06:00",
+                "09:00",
+                "15:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 630,
+              "departure_times": [
+                "12:00",
+                "21:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Khulna",
+      "to": "Dhaka",
+      "distance_km": 333,
+      "avg_duration_hours": 8.0,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 550,
+              "departure_times": [
+                "07:00",
+                "12:00",
+                "20:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 880,
+              "departure_times": [
+                "09:00",
+                "22:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Green Line",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 520,
+              "departure_times": [
+                "07:00",
+                "12:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 884,
+              "departure_times": [
+                "09:30",
+                "22:00"
+              ]
+            },
+            {
+              "bus_type": "AC Volvo",
+              "fare": 1200,
+              "departure_times": [
+                "15:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Khulna",
+      "to": "Rajshahi",
+      "distance_km": 219,
+      "avg_duration_hours": 5.5,
+      "provider_schedules": [
+        {
+          "provider": "Green Line",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 350,
+              "departure_times": [
+                "07:00",
+                "12:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 595,
+              "departure_times": [
+                "09:30",
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Rajshahi",
+      "to": "Dhaka",
+      "distance_km": 253,
+      "avg_duration_hours": 6.0,
+      "provider_schedules": [
+        {
+          "provider": "Soudia",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 400,
+              "departure_times": [
+                "06:00",
+                "10:30",
+                "16:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 580,
+              "departure_times": [
+                "08:00",
+                "22:30"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "National Travels",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 420,
+              "departure_times": [
+                "07:00",
+                "14:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 630,
+              "departure_times": [
+                "10:00",
+                "22:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Green Line",
+          "services": [
+            {
+              "bus_type": "AC",
+              "fare": 650,
+              "departure_times": [
+                "09:30",
+                "18:30"
+              ]
+            },
+            {
+              "bus_type": "AC Volvo",
+              "fare": 900,
+              "departure_times": [
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Rajshahi",
+      "to": "Bogra",
+      "distance_km": 82,
+      "avg_duration_hours": 2.0,
+      "provider_schedules": [
+        {
+          "provider": "National Travels",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 150,
+              "departure_times": [
+                "07:00",
+                "12:00",
+                "17:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 225,
+              "departure_times": [
+                "10:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Green Line",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 160,
+              "departure_times": [
+                "09:30",
+                "15:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 272,
+              "departure_times": [
+                "18:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Rangpur",
+      "to": "Dhaka",
+      "distance_km": 300,
+      "avg_duration_hours": 7.5,
+      "provider_schedules": [
+        {
+          "provider": "Desh Travel",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 500,
+              "departure_times": [
+                "06:00",
+                "14:00",
+                "21:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 750,
+              "departure_times": [
+                "08:30",
+                "23:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "National Travels",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 480,
+              "departure_times": [
+                "07:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 720,
+              "departure_times": [
+                "10:00",
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Rangpur",
+      "to": "Dinajpur",
+      "distance_km": 74,
+      "avg_duration_hours": 2.0,
+      "provider_schedules": [
+        {
+          "provider": "Desh Travel",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 120,
+              "departure_times": [
+                "06:00",
+                "11:00",
+                "17:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "National Travels",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 110,
+              "departure_times": [
+                "07:00",
+                "14:00",
+                "18:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Bogra",
+      "to": "Dhaka",
+      "distance_km": 197,
+      "avg_duration_hours": 5.0,
+      "provider_schedules": [
+        {
+          "provider": "National Travels",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 350,
+              "departure_times": [
+                "07:00",
+                "14:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 525,
+              "departure_times": [
+                "10:00",
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Dinajpur",
+      "to": "Dhaka",
+      "distance_km": 376,
+      "avg_duration_hours": 8.5,
+      "provider_schedules": [
+        {
+          "provider": "Desh Travel",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 550,
+              "departure_times": [
+                "06:00",
+                "17:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 825,
+              "departure_times": [
+                "21:00",
+                "23:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "National Travels",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 530,
+              "departure_times": [
+                "07:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 795,
+              "departure_times": [
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Jessore",
+      "to": "Dhaka",
+      "distance_km": 270,
+      "avg_duration_hours": 6.5,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 400,
+              "departure_times": [
+                "07:00",
+                "12:00",
+                "20:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 640,
+              "departure_times": [
+                "09:00",
+                "22:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Green Line",
+          "services": [
+            {
+              "bus_type": "AC",
+              "fare": 660,
+              "departure_times": [
+                "09:30",
+                "18:30"
+              ]
+            },
+            {
+              "bus_type": "AC Volvo",
+              "fare": 950,
+              "departure_times": [
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Barishal",
+      "to": "Dhaka",
+      "distance_km": 197,
+      "avg_duration_hours": 5.0,
+      "provider_schedules": [
+        {
+          "provider": "Soudia",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 380,
+              "departure_times": [
+                "06:00",
+                "13:30",
+                "19:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 551,
+              "departure_times": [
+                "08:00",
+                "22:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Comilla",
+      "to": "Dhaka",
+      "distance_km": 91,
+      "avg_duration_hours": 2.0,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 200,
+              "departure_times": [
+                "06:00",
+                "09:00",
+                "12:00",
+                "15:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 320,
+              "departure_times": [
+                "08:00",
+                "14:00",
+                "20:30"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Soudia",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 190,
+              "departure_times": [
+                "06:00",
+                "10:30",
+                "16:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 276,
+              "departure_times": [
+                "08:00",
+                "22:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Mymensingh",
+      "to": "Dhaka",
+      "distance_km": 120,
+      "avg_duration_hours": 2.5,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 180,
+              "departure_times": [
+                "07:00",
+                "09:00",
+                "12:00",
+                "15:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 288,
+              "departure_times": [
+                "08:00",
+                "13:00",
+                "20:30"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "S.A. Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 170,
+              "departure_times": [
+                "06:00",
+                "10:00",
+                "14:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 238,
+              "departure_times": [
+                "09:00",
+                "21:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Tk Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 160,
+              "departure_times": [
+                "06:30",
+                "08:30",
+                "11:30",
+                "14:30",
+                "17:30"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Noakhali",
+      "to": "Dhaka",
+      "distance_km": 170,
+      "avg_duration_hours": 4.0,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 280,
+              "departure_times": [
+                "07:00",
+                "12:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 448,
+              "departure_times": [
+                "09:00",
+                "22:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "S.A. Paribahan",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 270,
+              "departure_times": [
+                "06:00",
+                "12:00",
+                "18:00"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 378,
+              "departure_times": [
+                "21:00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "from": "Kushtia",
+      "to": "Dhaka",
+      "distance_km": 215,
+      "avg_duration_hours": 5.0,
+      "provider_schedules": [
+        {
+          "provider": "Hanif Enterprise",
+          "services": [
+            {
+              "bus_type": "Non-AC",
+              "fare": 380,
+              "departure_times": [
+                "07:00",
+                "12:00",
+                "20:30"
+              ]
+            },
+            {
+              "bus_type": "AC",
+              "fare": 608,
+              "departure_times": [
+                "09:00",
+                "22:00"
+              ]
+            }
+          ]
+        },
+        {
+          "provider": "Green Line",
+          "services": [
+            {
+              "bus_type": "AC",
+              "fare": 630,
+              "departure_times": [
+                "09:30",
+                "18:30"
+              ]
+            },
+            {
+              "bus_type": "AC Volvo",
+              "fare": 900,
+              "departure_times": [
+                "22:00"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "special_services": {
+    "eid_special": {
+      "note": "During Eid-ul-Fitr and Eid-ul-Adha, fare surcharge of 20-30% applies. Book at least 7 days in advance.",
+      "providers_with_eid_package": [
+        "Green Line",
+        "Royal Coach",
+        "Hanif Enterprise",
+        "Shyamoli Paribahan"
+      ]
+    },
+    "student_discount": {
+      "note": "10% discount on Non-AC tickets for students with valid ID.",
+      "providers_offering": [
+        "Desh Travel",
+        "S.A. Paribahan",
+        "Tk Enterprise",
+        "National Travels"
+      ]
+    },
+    "group_discount": {
+      "note": "Groups of 10 or more get 15% discount. Contact provider directly.",
+      "providers_offering": [
+        "Hanif Enterprise",
+        "Green Line",
+        "Shyamoli Paribahan",
+        "Royal Coach"
+      ]
+    }
+  },
+  "general_info": {
+    "booking_tips": [
+      "Book at least 2 days in advance for popular routes like Dhaka-Chattogram and Dhaka-Cox's Bazar.",
+      "Night buses (10 PM onwards) are often cheaper and save hotel costs.",
+      "AC buses are significantly cooler during April-September (summer season).",
+      "Carry your booking ID at all times for verification at the counter."
+    ],
+    "popular_routes": [
+      "Dhaka-Chattogram",
+      "Dhaka-Cox's Bazar",
+      "Dhaka-Sylhet",
+      "Dhaka-Khulna",
+      "Dhaka-Rajshahi"
+    ],
+    "payment_methods": [
+      "bKash",
+      "Nagad",
+      "Rocket",
+      "Cash at Counter",
+      "Visa/Mastercard (select providers)"
+    ]
+  }
 }
-

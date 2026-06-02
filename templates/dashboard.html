@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - BusGo{% endblock %}
+{% block content %}
+
+<div class="page-header dashboard-header">
+    <div>
+        <h1 class="page-title">My <span class="accent">Dashboard</span></h1>
+        <p id="dashboardSub" class="page-sub">Your tickets, travel history, and downloads</p>
+    </div>
+    <button class="btn btn-outline" type="button" onclick="dashboardLogout()">Logout</button>
+</div>
+
+<div id="dashboardLoginPrompt" class="empty-state hidden">
+    Please log in to view your dashboard.
+    <div class="chat-actions" style="justify-content:center">
+        <a class="btn btn-primary" href="/login-page">Go to Login</a>
+    </div>
+</div>
+
+<div id="dashboardContent" class="hidden">
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <span>Total Bookings</span>
+            <strong id="statTotal">0</strong>
+        </div>
+        <div class="stat-card">
+            <span>Active Tickets</span>
+            <strong id="statActive">0</strong>
+        </div>
+        <div class="stat-card">
+            <span>Cancelled</span>
+            <strong id="statCancelled">0</strong>
+        </div>
+        <div class="stat-card">
+            <span>Total Active Spend</span>
+            <strong><span id="statSpent">0</span> Taka</strong>
+        </div>
+    </div>
+
+    <div class="dashboard-section">
+        <div class="section-heading">
+            <h2>Active Tickets</h2>
+            <span id="activeCount" class="result-count">0 ticket(s)</span>
+        </div>
+        <div id="activeBookings"></div>
+    </div>
+
+    <div class="dashboard-section">
+        <div class="section-heading">
+            <h2>Travel History</h2>
+            <span id="historyCount" class="result-count">0 booking(s)</span>
+        </div>
+        <div id="bookingHistory"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', loadDashboard);
+
+async function dashboardLogout() {
+    try {
+        await fetch('/auth/logout', {
+            method: 'POST',
+            credentials: 'same-origin'
+        });
+    } catch(e) {}
+    location.href = '/login-page';
+}
+
+async function loadDashboard() {
+    try {
+        const res = await fetch('/user/dashboard');
+        if (res.status === 401) {
+            document.getElementById('dashboardLoginPrompt').classList.remove('hidden');
+            return;
+        }
+        const data = await res.json();
+        if (!res.ok) {
+            showToast(data.detail || 'Could not load dashboard.', 'error');
+            return;
+        }
+        renderDashboard(data);
+    } catch(e) {
+        showToast('Connection error while loading dashboard.', 'error');
+    }
+}
+
+function renderDashboard(data) {
+    const user = data.user || {};
+    const stats = data.stats || {};
+    const bookings = data.bookings || [];
+    const active = bookings.filter(b => ['active', 'payment_pending'].includes(b.status));
+    const history = bookings.filter(b => !['active', 'payment_pending'].includes(b.status));
+
+    document.getElementById('dashboardSub').textContent =
+        `${user.name || 'Passenger'} · ${user.phone || ''}`;
+    document.getElementById('statTotal').textContent = stats.total_bookings || 0;
+    document.getElementById('statActive').textContent = stats.active_bookings || 0;
+    document.getElementById('statCancelled').textContent = stats.cancelled_bookings || 0;
+    document.getElementById('statSpent').textContent = stats.total_spent || 0;
+    document.getElementById('activeCount').textContent = `${active.length} ticket(s)`;
+    document.getElementById('historyCount').textContent = `${history.length} booking(s)`;
+
+    document.getElementById('activeBookings').innerHTML = active.length
+        ? active.map(renderBookingCard).join('')
+        : '<div class="empty-state">No active tickets right now.</div>';
+    document.getElementById('bookingHistory').innerHTML = history.length
+        ? history.map(renderBookingCard).join('')
+        : '<div class="empty-state">No previous booking history yet.</div>';
+
+    document.getElementById('dashboardContent').classList.remove('hidden');
+}
+
+function renderBookingCard(booking) {
+    const status = escapeHTML(booking.status || 'active');
+    const isActive = status === 'active';
+    const isPendingPayment = status === 'payment_pending';
+    const canDownload = booking.payment_status === 'paid';
+    return `
+        <div class="booking-item ${isActive || isPendingPayment ? 'active' : 'cancelled'} dashboard-ticket">
+            <div class="booking-header">
+                <div>
+                    <div class="booking-id">${escapeHTML(booking.booking_id)}</div>
+                    <div class="ticket-route">${escapeHTML(booking.from_district)} to ${escapeHTML(booking.to_district)}</div>
+                </div>
+                <span class="booking-status status-${status}">${status.toUpperCase()}</span>
+            </div>
+            <div class="booking-body">
+                <div class="booking-field"><span>Passenger</span><strong>${escapeHTML(booking.name)}</strong></div>
+                <div class="booking-field"><span>Provider</span><strong>${escapeHTML(booking.bus_provider)}</strong></div>
+                <div class="booking-field"><span>Bus</span><strong>${escapeHTML(booking.bus_type || '-')}</strong></div>
+                <div class="booking-field"><span>Date & Time</span><strong>${escapeHTML(booking.travel_date)} · ${escapeHTML(booking.departure_time || '-')}</strong></div>
+                <div class="booking-field"><span>Dropping Point</span><strong>${escapeHTML(booking.dropping_point)}</strong></div>
+                <div class="booking-field"><span>Seats</span><strong>${escapeHTML(booking.seat_numbers || '-')}</strong></div>
+                <div class="booking-field"><span>Passengers</span><strong>${escapeHTML(booking.num_passengers)}</strong></div>
+                <div class="booking-field"><span>Payment</span><strong>${escapeHTML(booking.payment_status || '-')}</strong></div>
+                <div class="booking-field total-field"><span>Total Fare</span><strong>${escapeHTML(booking.total_amount)} Taka</strong></div>
+            </div>
+            <div class="booking-footer">
+                ${canDownload ? `<a class="btn btn-primary btn-small" href="/tickets/${encodeURIComponent(booking.booking_id)}.pdf" target="_blank" rel="noopener">Download PDF</a>` : ''}
+                ${isPendingPayment ? `<button class="btn btn-primary btn-small" type="button" onclick="showDashboardPayment('${escapeHTML(booking.booking_id)}', ${parseInt(booking.total_amount) || 0})">Complete Payment</button>` : ''}
+                ${isActive ? `<button class="btn btn-outline btn-small" type="button" onclick="requestRefund('${escapeHTML(booking.booking_id)}')">Request Refund</button>` : ''}
+                ${(isActive || isPendingPayment) ? `<button class="btn btn-danger btn-small" type="button" onclick="cancelDashboardBooking('${escapeHTML(booking.booking_id)}')">Cancel Ticket</button>` : ''}
+            </div>
+        </div>`;
+}
+
+function showDashboardPayment(bookingId, amount) {
+    const html = `
+        <div class="modal" id="dashboardPaymentModal">
+            <div class="modal-box">
+                <h2>Demo Payment</h2>
+                <div class="payment-card">
+                    <p class="payment-note">No real money will be charged. Seeded demo PIN is 1234.</p>
+                    <div class="form-grid compact-form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Method</label>
+                            <select class="form-select" id="dashPayProvider">
+                                <option value="bkash">bKash Demo</option>
+                                <option value="nagad">Nagad Demo</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Wallet Mobile</label>
+                            <input class="form-input" id="dashPayPhone" placeholder="01309183295">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Amount</label>
+                            <input class="form-input" id="dashPayAmount" value="${amount}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">PIN</label>
+                            <input class="form-input" id="dashPayPin" type="password" placeholder="1234">
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-actions" style="justify-content:center">
+                    <button class="btn btn-primary" onclick="payDashboardBooking('${bookingId}')">Pay ${amount} Taka</button>
+                    <button class="btn btn-outline" onclick="document.getElementById('dashboardPaymentModal').remove()">Close</button>
+                </div>
+            </div>
+        </div>`;
+    document.body.insertAdjacentHTML('beforeend', html);
+}
+
+async function payDashboardBooking(bookingId) {
+    const provider = document.getElementById('dashPayProvider').value;
+    let phone = document.getElementById('dashPayPhone').value.trim();
+    if (phone.startsWith('+88')) phone = phone.slice(3);
+    const amount = parseInt(document.getElementById('dashPayAmount').value);
+    const pin = document.getElementById('dashPayPin').value.trim();
+    try {
+        const res = await fetch('/payments/demo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ booking_id: bookingId, provider, phone, amount, pin })
+        });
+        const data = await res.json();
+        if (!res.ok) return showToast(data.detail || 'Payment failed.', 'error');
+        document.getElementById('dashboardPaymentModal').remove();
+        showToast('Payment successful.');
+        loadDashboard();
+    } catch(e) {
+        showToast('Connection error during payment.', 'error');
+    }
+}
+
+async function requestRefund(bookingId) {
+    try {
+        const res = await fetch(`/refunds/request/${encodeURIComponent(bookingId)}`, { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok) return showToast(data.detail || 'Refund request failed.', 'error');
+        showToast(data.message || 'Refund requested.');
+    } catch(e) {
+        showToast('Connection error while requesting refund.', 'error');
+    }
+}
+
+async function cancelDashboardBooking(bookingId) {
+    if (!confirm(`Cancel booking ${bookingId}?`)) return;
+    try {
+        const res = await fetch(`/bookings/${encodeURIComponent(bookingId)}?permanent=false`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok) {
+            showToast(data.detail || 'Could not cancel ticket.', 'error');
+            return;
+        }
+        showToast(data.message || 'Ticket cancelled.');
+        loadDashboard();
+    } catch(e) {
+        showToast('Connection error while cancelling ticket.', 'error');
+    }
+}
+
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    }[ch]));
+}
+</script>
+{% endblock %}

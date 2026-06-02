@@ -1,16 +1,22 @@
-version: '3.8'
-
 services:
   app:
     build: .
     container_name: busgo_app
-    ports:
-      - "8000:8000"
-    volumes:
-      # Persist the SQLite database
-      - ./bus_bookings.db:/app/bus_bookings.db
-      # Persist the vector store
-      - ./vectorstore:/app/vectorstore
     env_file:
       - .env
+    environment:
+      PORT: "8000"
+      BUSGO_DATABASE_FILE: /app/data/bus_bookings.db
+      BUSGO_PAYMENT_DATABASE_FILE: /app/data/demo_payments.db
+      BUSGO_VECTORSTORE_DIR: /app/data/vectorstore
+      HF_HOME: /app/.cache/huggingface
+    ports:
+      - "8004:8000"
+    volumes:
+      - busgo_data:/app/data
+      - busgo_hf_cache:/app/.cache/huggingface
     restart: unless-stopped
+
+volumes:
+  busgo_data:
+  busgo_hf_cache:

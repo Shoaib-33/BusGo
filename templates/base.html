@@ -6,7 +6,7 @@
     <title>{% block title %}BusGo — Ticket Booking{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=rbac-20260530">
 </head>
 <body>
 
@@ -18,6 +18,9 @@
         <a href="/providers-page" class="nav-link {% if active == 'providers' %}active{% endif %}">Providers</a>
         <a href="/routes-page" class="nav-link {% if active == 'routes' %}active{% endif %}">Routes & Fares</a>
         <a href="/assistant-page" class="nav-link {% if active == 'assistant' %}active{% endif %}">AI Assistant</a>
+        <a href="/dashboard-page" id="dashboardNavLink" class="nav-link {% if active == 'dashboard' %}active{% endif %}">Dashboard</a>
+        <a href="/admin-page" id="adminNavLink" class="nav-link {% if active == 'admin' %}active{% endif %} hidden">Admin</a>
+        <a href="/login-page" id="authNavLink" class="nav-link {% if active == 'login' %}active{% endif %}">Login</a>
     </div>
     <div class="nav-status" id="statusDot" title="Checking backend...">●</div>
 </nav>
@@ -26,7 +29,7 @@
     {% block content %}{% endblock %}
 </main>
 
-<script src="/static/js/main.js"></script>
+<script src="/static/js/main.js?v=rbac-20260530"></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

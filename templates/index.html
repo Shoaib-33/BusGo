@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Book Ticket — BusGo{% endblock %}
+{% block title %}Book Ticket - BusGo{% endblock %}
 {% block content %}
 
 <div class="page-header">
@@ -8,7 +8,7 @@
 </div>
 
 <div class="card booking-card">
-    <div class="step-label">Step 1 — Route Details</div>
+    <div class="step-label">Step 1 - Route Details</div>
 
     <div class="form-grid">
         <div class="form-group">
@@ -37,8 +37,15 @@
 
         <div class="form-group">
             <label class="form-label">Dropping Point</label>
-            <select id="droppingPoint" class="form-select" onchange="onDropChange()" disabled>
+            <select id="droppingPoint" class="form-select" onchange="updateRouteSummary()" disabled>
                 <option value="">Select destination...</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Bus Type & Time</label>
+            <select id="serviceSelect" class="form-select" onchange="updateRouteSummary()" disabled>
+                <option value="">Select route first...</option>
             </select>
         </div>
     </div>
@@ -49,7 +56,7 @@
 </div>
 
 <div class="card booking-card">
-    <div class="step-label">Step 2 — Passenger Details</div>
+    <div class="step-label">Step 2 - Passenger Details</div>
 
     <div class="form-grid">
         <div class="form-group">
@@ -64,29 +71,52 @@
 
         <div class="form-group">
             <label class="form-label">Number of Passengers</label>
-            <input type="number" id="numPassengers" class="form-input" value="1" min="1" max="10" onchange="updateTotal()">
+            <input type="number" id="numPassengers" class="form-input" value="1" min="1" max="10" onchange="onPassengerCountChange()">
         </div>
 
         <div class="form-group">
             <label class="form-label">Travel Date</label>
-            <input type="date" id="travelDate" class="form-input">
+            <input type="date" id="travelDate" class="form-input" onchange="loadSeatLayout()">
         </div>
     </div>
 
     <div id="totalBox" class="total-box hidden">
-        💰 Total: <strong id="totalAmount">0</strong> Taka
+        Total: <strong id="totalAmount">0</strong> Taka
+    </div>
+</div>
+
+<div class="card booking-card">
+    <div class="step-label">Step 3 - Seat Selection</div>
+
+    <div id="seatPickerEmpty" class="seat-empty">Select route, bus type, time, and date to see seats.</div>
+
+    <div id="seatPicker" class="seat-picker hidden">
+        <div class="seat-toolbar">
+            <div class="seat-legend">
+                <span><i class="seat-dot available"></i>Available</span>
+                <span><i class="seat-dot selected"></i>Selected</span>
+                <span><i class="seat-dot booked"></i>Booked</span>
+                <span><i class="seat-dot female"></i>Female reserved</span>
+                <span><i class="seat-window-mark"></i>Window</span>
+            </div>
+            <button class="btn btn-outline btn-small" type="button" onclick="autoSelectSeats()">Auto Select</button>
+        </div>
+        <div class="bus-shell">
+            <div class="driver-row">Driver</div>
+            <div id="seatMap" class="seat-map"></div>
+        </div>
+        <div id="seatSummary" class="seat-summary"></div>
     </div>
 
     <button class="btn btn-primary btn-full" onclick="submitBooking()">
-        🎫 Confirm Booking
+        Confirm Booking
     </button>
 </div>
 
-<!-- Success Modal -->
 <div id="successModal" class="modal hidden">
     <div class="modal-box">
-        <div class="modal-icon">✅</div>
-        <h2>Booking Confirmed!</h2>
+        <div class="modal-icon">OK</div>
+        <h2>Seat Hold Created</h2>
         <div id="modalContent" class="modal-content"></div>
         <button class="btn btn-primary" onclick="closeModal()">Done</button>
     </div>
@@ -96,11 +126,31 @@
 
 {% block scripts %}
 <script>
-    // Set min date to tomorrow
+    let latestSeatLayout = null;
+    let selectedSeats = new Set();
+
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     document.getElementById('travelDate').min = tomorrow.toISOString().split('T')[0];
     document.getElementById('travelDate').value = tomorrow.toISOString().split('T')[0];
+
+    loadLoggedInPassenger();
+
+    async function loadLoggedInPassenger() {
+        try {
+            const res = await fetch('/auth/me');
+            const data = await res.json();
+            if (data.authenticated && data.user) {
+                document.getElementById('passengerName').value = data.user.name || '';
+                document.getElementById('passengerPhone').value = data.user.phone || '';
+            }
+        } catch(e) {}
+    }
+
+    function resetSelect(select, text) {
+        select.innerHTML = `<option value="">${text}</option>`;
+        select.disabled = true;
+    }
 
     function onProviderChange() {
         const sel = document.getElementById('providerSelect');
@@ -108,53 +158,57 @@
         const from = document.getElementById('fromDistrict');
         const to = document.getElementById('toDistrict');
         const dp = document.getElementById('droppingPoint');
+        const service = document.getElementById('serviceSelect');
 
-        from.innerHTML = '<option value="">Select from district...</option>';
-        to.innerHTML = '<option value="">Select to district...</option>';
-        dp.innerHTML = '<option value="">Select destination first...</option>';
-        to.disabled = true;
-        dp.disabled = true;
+        resetSelect(from, 'Select from district...');
+        resetSelect(to, 'Select to district...');
+        resetSelect(dp, 'Select destination first...');
+        resetSelect(service, 'Select route first...');
+        resetSeatPicker();
         hideRouteSummary();
 
-        if (!opt.value) { from.disabled = true; return; }
+        if (!opt.value) return;
 
-        const districts = opt.dataset.districts.split(',');
+        const districts = opt.dataset.districts.split(',').map(d => d.trim()).filter(Boolean);
         districts.forEach(d => {
             const o = document.createElement('option');
-            o.value = d.trim(); o.textContent = d.trim();
+            o.value = d;
+            o.textContent = d;
             from.appendChild(o);
         });
-        from.disabled = false;
+        from.disabled = !districts.length;
     }
 
     function onFromChange() {
         const from = document.getElementById('fromDistrict').value;
-        const provSel = document.getElementById('providerSelect');
-        const opt = provSel.options[provSel.selectedIndex];
+        const opt = document.getElementById('providerSelect').options[document.getElementById('providerSelect').selectedIndex];
         const to = document.getElementById('toDistrict');
         const dp = document.getElementById('droppingPoint');
+        const service = document.getElementById('serviceSelect');
 
-        to.innerHTML = '<option value="">Select to district...</option>';
-        dp.innerHTML = '<option value="">Select destination first...</option>';
-        dp.disabled = true;
+        resetSelect(to, 'Select to district...');
+        resetSelect(dp, 'Select destination first...');
+        resetSelect(service, 'Select route first...');
+        resetSeatPicker();
         hideRouteSummary();
 
-        if (!from) { to.disabled = true; return; }
+        if (!from) return;
 
-        const districts = opt.dataset.districts.split(',').map(d => d.trim()).filter(d => d !== from);
+        const districts = opt.dataset.districts.split(',').map(d => d.trim()).filter(d => d && d !== from);
         districts.forEach(d => {
             const o = document.createElement('option');
-            o.value = d; o.textContent = d;
+            o.value = d;
+            o.textContent = d;
             to.appendChild(o);
         });
-        to.disabled = false;
+        to.disabled = !districts.length;
     }
 
     async function onToChange() {
         const to = document.getElementById('toDistrict').value;
         const dp = document.getElementById('droppingPoint');
-        dp.innerHTML = '<option value="">Loading...</option>';
-        dp.disabled = true;
+        resetSelect(dp, 'Loading...');
+        resetSeatPicker();
         hideRouteSummary();
 
         if (!to) return;
@@ -165,37 +219,75 @@
         (data.dropping_points || []).forEach(pt => {
             const o = document.createElement('option');
             o.value = pt.name;
-            o.textContent = `${pt.name} — ${pt.price} Taka`;
-            o.dataset.price = pt.price;
+            o.textContent = `${pt.name}`;
             dp.appendChild(o);
         });
-        dp.disabled = false;
+        dp.disabled = !(data.dropping_points || []).length;
+
+        await loadRouteServices();
     }
 
-    function onDropChange() {
+    async function loadRouteServices() {
+        const provider = document.getElementById('providerSelect').value;
+        const from = document.getElementById('fromDistrict').value;
+        const to = document.getElementById('toDistrict').value;
+        const service = document.getElementById('serviceSelect');
+
+        resetSelect(service, 'Loading services...');
+        if (!provider || !from || !to) return;
+
+        const params = new URLSearchParams({ provider, from_district: from, to_district: to });
+        const res = await fetch(`/route-services?${params.toString()}`);
+        const data = await res.json();
+
+        service.innerHTML = '<option value="">Select bus type & time...</option>';
+        (data.services || []).forEach(s => {
+            const o = document.createElement('option');
+            o.value = `${s.bus_type}|${s.departure_time || ''}|${s.fare}`;
+            o.textContent = `${s.bus_type} - ${s.departure_time || 'Time not listed'} - ${s.fare} Taka`;
+            o.dataset.busType = s.bus_type;
+            o.dataset.departureTime = s.departure_time || '';
+            o.dataset.fare = s.fare;
+            service.appendChild(o);
+        });
+        service.disabled = !(data.services || []).length;
+    }
+
+    function updateRouteSummary() {
         updateTotal();
         const from = document.getElementById('fromDistrict').value;
         const to = document.getElementById('toDistrict').value;
         const dp = document.getElementById('droppingPoint');
-        const opt = dp.options[dp.selectedIndex];
-        if (opt.value) {
+        const drop = dp.options[dp.selectedIndex];
+        const service = document.getElementById('serviceSelect');
+        const svc = service.options[service.selectedIndex];
+
+        if (drop && drop.value && svc && svc.dataset.fare) {
             document.getElementById('summaryText').textContent =
-                `✅ ${from} → ${to}  |  ${opt.value}  |  ${opt.dataset.price} Taka/person`;
+                `${from} to ${to} | ${drop.value} | ${svc.dataset.busType} ${svc.dataset.departureTime} | ${svc.dataset.fare} Taka/person`;
             document.getElementById('routeSummary').classList.remove('hidden');
+            loadSeatLayout();
         } else {
-            hideRouteSummary();
+            document.getElementById('routeSummary').classList.add('hidden');
+            resetSeatPicker();
         }
     }
 
     function updateTotal() {
-        const dp = document.getElementById('droppingPoint');
-        const opt = dp.options[dp.selectedIndex];
+        const service = document.getElementById('serviceSelect');
+        const opt = service.options[service.selectedIndex];
         const n = parseInt(document.getElementById('numPassengers').value) || 1;
-        if (opt && opt.dataset.price) {
-            const total = parseInt(opt.dataset.price) * n;
-            document.getElementById('totalAmount').textContent = total;
+        if (opt && opt.dataset.fare) {
+            document.getElementById('totalAmount').textContent = parseInt(opt.dataset.fare) * n;
             document.getElementById('totalBox').classList.remove('hidden');
         }
+    }
+
+    function onPassengerCountChange() {
+        updateTotal();
+        const n = parseInt(document.getElementById('numPassengers').value) || 1;
+        selectedSeats = new Set([...selectedSeats].slice(0, n));
+        renderSeatMap();
     }
 
     function hideRouteSummary() {
@@ -203,32 +295,153 @@
         document.getElementById('totalBox').classList.add('hidden');
     }
 
+    function resetSeatPicker() {
+        latestSeatLayout = null;
+        selectedSeats = new Set();
+        document.getElementById('seatPicker').classList.add('hidden');
+        document.getElementById('seatPickerEmpty').classList.remove('hidden');
+        document.getElementById('seatMap').innerHTML = '';
+        document.getElementById('seatSummary').textContent = '';
+    }
+
+    async function loadSeatLayout() {
+        const provider = document.getElementById('providerSelect').value;
+        const from = document.getElementById('fromDistrict').value;
+        const to = document.getElementById('toDistrict').value;
+        const service = document.getElementById('serviceSelect');
+        const serviceOpt = service.options[service.selectedIndex];
+        const date = document.getElementById('travelDate').value;
+
+        if (!provider || !from || !to || !date || !serviceOpt || !serviceOpt.dataset.fare) {
+            resetSeatPicker();
+            return;
+        }
+
+        const params = new URLSearchParams({
+            provider,
+            from_district: from,
+            to_district: to,
+            travel_date: date,
+            bus_type: serviceOpt.dataset.busType || '',
+            departure_time: serviceOpt.dataset.departureTime || ''
+        });
+
+        try {
+            const res = await fetch(`/seat-layout?${params.toString()}`);
+            if (!res.ok) {
+                resetSeatPicker();
+                return;
+            }
+            latestSeatLayout = await res.json();
+            selectedSeats = new Set([...selectedSeats].filter(label => {
+                const seat = latestSeatLayout.rows.flat().find(s => s.label === label);
+                return seat && seat.status === 'available';
+            }));
+            document.getElementById('seatPickerEmpty').classList.add('hidden');
+            document.getElementById('seatPicker').classList.remove('hidden');
+            renderSeatMap();
+        } catch(e) {
+            resetSeatPicker();
+        }
+    }
+
+    function renderSeatMap() {
+        const map = document.getElementById('seatMap');
+        if (!latestSeatLayout) return;
+
+        map.innerHTML = latestSeatLayout.rows.map(row => {
+            const cells = row.map((seat, index) => {
+                const selected = selectedSeats.has(seat.label);
+                const classes = [
+                    'seat',
+                    seat.status,
+                    selected ? 'selected' : '',
+                    seat.is_window ? 'window' : '',
+                    seat.is_female_reserved ? 'female-reserved' : ''
+                ].filter(Boolean).join(' ');
+                const disabled = seat.status === 'booked' ? 'disabled' : '';
+                const gap = index === 2 ? '<span class="seat-aisle"></span>' : '';
+                return `${gap}<button type="button" class="${classes}" ${disabled} onclick="toggleSeat('${seat.label}')">${seat.label}</button>`;
+            }).join('');
+            return `<div class="seat-row">${cells}</div>`;
+        }).join('');
+
+        updateSeatSummary();
+    }
+
+    function toggleSeat(label) {
+        const n = parseInt(document.getElementById('numPassengers').value) || 1;
+        if (selectedSeats.has(label)) {
+            selectedSeats.delete(label);
+        } else {
+            if (selectedSeats.size >= n) {
+                showToast(`You can select ${n} seat(s).`, 'error');
+                return;
+            }
+            selectedSeats.add(label);
+        }
+        renderSeatMap();
+    }
+
+    function autoSelectSeats() {
+        if (!latestSeatLayout) return;
+        const n = parseInt(document.getElementById('numPassengers').value) || 1;
+        const seats = latestSeatLayout.rows.flat();
+        const regular = seats.filter(s => s.status === 'available' && !s.is_female_reserved).map(s => s.label);
+        const reserved = seats.filter(s => s.status === 'available' && s.is_female_reserved).map(s => s.label);
+        selectedSeats = new Set([...regular, ...reserved].slice(0, n));
+        renderSeatMap();
+    }
+
+    function updateSeatSummary() {
+        const n = parseInt(document.getElementById('numPassengers').value) || 1;
+        const summary = document.getElementById('seatSummary');
+        const seats = [...selectedSeats];
+        summary.textContent = seats.length
+            ? `Selected ${seats.length}/${n}: ${seats.join(', ')}`
+            : `Select ${n} seat(s)`;
+    }
+
     async function submitBooking() {
         const provider = document.getElementById('providerSelect').value;
         const from = document.getElementById('fromDistrict').value;
         const to = document.getElementById('toDistrict').value;
         const dp = document.getElementById('droppingPoint').value;
+        const service = document.getElementById('serviceSelect');
+        const serviceOpt = service.options[service.selectedIndex];
         const name = document.getElementById('passengerName').value.trim();
         let phone = document.getElementById('passengerPhone').value.trim();
         const n = parseInt(document.getElementById('numPassengers').value);
         const date = document.getElementById('travelDate').value;
 
         if (!provider || !from || !to || !dp) return showToast('Please complete route selection.', 'error');
+        if (!serviceOpt || !serviceOpt.dataset.fare) return showToast('Please select bus type and departure time.', 'error');
         if (!name) return showToast('Please enter your name.', 'error');
         if (phone.startsWith('+88')) phone = phone.slice(3);
         if (phone.length < 11 || !/^\d+$/.test(phone)) return showToast('Enter a valid 11-digit phone number.', 'error');
+        if (!latestSeatLayout) return showToast('Please load seat availability first.', 'error');
+        if (selectedSeats.size !== n) return showToast(`Please select exactly ${n} seat(s).`, 'error');
 
         const btn = document.querySelector('.btn-primary');
-        btn.disabled = true; btn.textContent = 'Booking...';
+        btn.disabled = true;
+        btn.textContent = 'Booking...';
 
         try {
             const res = await fetch('/bookings', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    name, phone, bus_provider: provider,
-                    from_district: from, to_district: to,
-                    dropping_point: dp, travel_date: date, num_passengers: n
+                    name,
+                    phone,
+                    bus_provider: provider,
+                    from_district: from,
+                    to_district: to,
+                    dropping_point: dp,
+                    travel_date: date,
+                    num_passengers: n,
+                    bus_type: serviceOpt.dataset.busType,
+                    departure_time: serviceOpt.dataset.departureTime,
+                    selected_seats: [...selectedSeats]
                 })
             });
             const data = await res.json();
@@ -236,20 +449,94 @@
                 document.getElementById('modalContent').innerHTML = `
                     <div class="booking-result">
                         <div class="result-row"><span>Booking ID</span><strong>${data.booking_id}</strong></div>
+                        <div class="result-row"><span>Status</span><strong>${data.status}</strong></div>
                         <div class="result-row"><span>Name</span><strong>${data.name}</strong></div>
-                        <div class="result-row"><span>Route</span><strong>${data.from_district} → ${data.to_district}</strong></div>
+                        <div class="result-row"><span>Route</span><strong>${data.from_district} to ${data.to_district}</strong></div>
                         <div class="result-row"><span>Dropping Point</span><strong>${data.dropping_point}</strong></div>
                         <div class="result-row"><span>Provider</span><strong>${data.bus_provider}</strong></div>
+                        <div class="result-row"><span>Bus Type</span><strong>${data.bus_type || '-'}</strong></div>
+                        <div class="result-row"><span>Departure</span><strong>${data.departure_time || '-'}</strong></div>
+                        <div class="result-row"><span>Seats</span><strong>${data.seat_numbers || '-'}</strong></div>
                         <div class="result-row"><span>Date</span><strong>${data.travel_date}</strong></div>
                         <div class="result-row"><span>Passengers</span><strong>${data.num_passengers}</strong></div>
                         <div class="result-row total-row"><span>Total</span><strong>${data.total_amount} Taka</strong></div>
-                    </div>`;
+                    </div>
+                    ${renderDemoPaymentForm(data.booking_id, data.total_amount, data.payment_expires_at)}`;
                 document.getElementById('successModal').classList.remove('hidden');
             } else {
                 showToast(data.detail || 'Booking failed.', 'error');
             }
-        } catch(e) { showToast('Connection error.', 'error'); }
-        btn.disabled = false; btn.textContent = '🎫 Confirm Booking';
+        } catch(e) {
+            showToast('Connection error.', 'error');
+        }
+        btn.disabled = false;
+        btn.textContent = 'Confirm Booking';
+    }
+
+    function renderDemoPaymentForm(bookingId, amount, expiresAt) {
+        return `
+            <div class="payment-card" data-payment-card>
+                <div class="payment-title">Demo Payment Required</div>
+                <p class="payment-note">Seats are held for 5 minutes. No real money will be charged.</p>
+                <div class="payment-countdown" data-expires-at="${expiresAt || ''}"></div>
+                <div class="form-grid compact-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Method</label>
+                        <select class="form-select" data-payment-provider>
+                            <option value="bkash">bKash Demo</option>
+                            <option value="nagad">Nagad Demo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Wallet Mobile</label>
+                        <input class="form-input" data-payment-phone placeholder="01309183295">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Amount</label>
+                        <input class="form-input" data-payment-amount value="${amount}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">PIN</label>
+                        <input class="form-input" data-payment-pin type="password" placeholder="Demo PIN 1234">
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-full" type="button" onclick="payDemoBooking('${bookingId}')">Pay ${amount} Taka</button>
+            </div>`;
+    }
+
+    async function payDemoBooking(bookingId) {
+        const card = document.querySelector('[data-payment-card]');
+        const provider = card.querySelector('[data-payment-provider]').value;
+        let phone = card.querySelector('[data-payment-phone]').value.trim();
+        if (phone.startsWith('+88')) phone = phone.slice(3);
+        const amount = parseInt(card.querySelector('[data-payment-amount]').value);
+        const pin = card.querySelector('[data-payment-pin]').value.trim();
+        if (!phone || !pin) return showToast('Enter wallet mobile and PIN.', 'error');
+        try {
+            const res = await fetch('/payments/demo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ booking_id: bookingId, provider, phone, amount, pin })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                showToast(data.detail || 'Payment failed.', 'error');
+                return;
+            }
+            document.getElementById('modalContent').innerHTML = `
+                <div class="booking-result">
+                    <div class="result-row"><span>Booking ID</span><strong>${data.booking.booking_id}</strong></div>
+                    <div class="result-row"><span>Payment</span><strong>${data.payment.status}</strong></div>
+                    <div class="result-row"><span>Transaction</span><strong>${data.payment.transaction_id}</strong></div>
+                    <div class="result-row total-row"><span>Total</span><strong>${data.booking.total_amount} Taka</strong></div>
+                </div>
+                <a class="btn btn-primary btn-full" href="/tickets/${encodeURIComponent(data.booking.booking_id)}.pdf" target="_blank" rel="noopener">
+                    Download Ticket PDF
+                </a>`;
+            showToast('Payment successful.');
+        } catch(e) {
+            showToast('Connection error during payment.', 'error');
+        }
     }
 
     function closeModal() {

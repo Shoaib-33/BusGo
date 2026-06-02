@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Login - BusGo{% endblock %}
+{% block content %}
+
+<div class="page-header">
+    <h1 class="page-title">Your <span class="accent">BusGo</span> Account</h1>
+    <p class="page-sub">Log in or create an account to book faster next time</p>
+</div>
+
+<div class="auth-shell">
+    <div class="auth-panel">
+        <div class="auth-tabs">
+            <button id="loginTab" class="auth-tab active" type="button" onclick="switchAuthMode('login')">Login</button>
+            <button id="signupTab" class="auth-tab" type="button" onclick="switchAuthMode('signup')">Sign up</button>
+        </div>
+
+        <form id="loginForm" class="auth-form" onsubmit="submitLogin(event)">
+            <div class="form-group">
+                <label class="form-label">Phone Number or Admin Email</label>
+                <input id="loginPhone" class="form-input" type="text" placeholder="01XXXXXXXXX or admin@busgo.local" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input id="loginPassword" class="form-input" type="password" placeholder="Enter password" autocomplete="current-password">
+            </div>
+            <button class="btn btn-primary btn-full" type="submit">Login</button>
+        </form>
+
+        <form id="signupForm" class="auth-form hidden" onsubmit="submitSignup(event)">
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input id="signupName" class="form-input" type="text" placeholder="Enter your full name" autocomplete="name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input id="signupPhone" class="form-input" type="text" placeholder="01XXXXXXXXX" autocomplete="tel">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input id="signupPassword" class="form-input" type="password" placeholder="Minimum 6 characters" autocomplete="new-password">
+            </div>
+            <button class="btn btn-primary btn-full" type="submit">Create Account</button>
+        </form>
+    </div>
+
+    <div class="auth-aside">
+        <div class="step-label">Why create account?</div>
+        <div class="auth-benefit">
+            <strong>Faster chatbot booking</strong>
+            <span>Name and mobile can be reused automatically after login.</span>
+        </div>
+        <div class="auth-benefit">
+            <strong>Easy ticket lookup</strong>
+            <span>Find your previous bookings by your saved phone number.</span>
+        </div>
+        <div class="auth-benefit">
+            <strong>Cleaner cancellation flow</strong>
+            <span>No need to type the same passenger details again and again.</span>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function switchAuthMode(mode) {
+    const loginMode = mode === 'login';
+    document.getElementById('loginForm').classList.toggle('hidden', !loginMode);
+    document.getElementById('signupForm').classList.toggle('hidden', loginMode);
+    document.getElementById('loginTab').classList.toggle('active', loginMode);
+    document.getElementById('signupTab').classList.toggle('active', !loginMode);
+}
+
+function normalizePhoneInput(value) {
+    let phone = value.trim();
+    if (phone.includes('@')) return phone.toLowerCase();
+    phone = phone.replace(/[\s-]+/g, '');
+    if (phone.startsWith('+88')) phone = phone.slice(3);
+    return phone;
+}
+
+async function submitLogin(event) {
+    event.preventDefault();
+    const phone = normalizePhoneInput(document.getElementById('loginPhone').value);
+    const password = document.getElementById('loginPassword').value;
+    await submitAuth('/auth/login', { phone, password }, 'Logged in successfully.');
+}
+
+async function submitSignup(event) {
+    event.preventDefault();
+    const name = document.getElementById('signupName').value.trim();
+    const phone = normalizePhoneInput(document.getElementById('signupPhone').value);
+    const password = document.getElementById('signupPassword').value;
+    await submitAuth('/auth/signup', { name, phone, password }, 'Account created successfully.');
+}
+
+async function submitAuth(url, payload, successMessage) {
+    try {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            showToast(data.detail || 'Authentication failed.', 'error');
+            return;
+        }
+        showToast(successMessage);
+        const target = data.user && data.user.role === 'admin' ? '/admin-page' : '/dashboard-page';
+        setTimeout(() => location.href = target, 700);
+    } catch(e) {
+        showToast('Connection error.', 'error');
+    }
+}
+</script>
+{% endblock %}

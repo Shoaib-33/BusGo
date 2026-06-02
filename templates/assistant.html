@@ -48,6 +48,7 @@
 {% block scripts %}
 <script>
 const sessionId = 'session-' + Math.random().toString(36).slice(2);
+const chatSeatState = {};
 
 function fillSuggestion(btn) {
     document.getElementById('chatInput').value = btn.textContent;
@@ -78,20 +79,400 @@ async function sendMessage() {
         });
         const data = await res.json();
         removeTyping(typingId);
-        appendMessage('assistant', data.message || 'Sorry, I could not process that.');
+        appendMessage(
+            'assistant',
+            data.message || 'Sorry, I could not process that.',
+            data.seat_selection || null,
+            data.account_offer || null,
+            data.account_signup || null,
+            data.payment_required || null
+        );
     } catch(e) {
         removeTyping(typingId);
         appendMessage('assistant', '⚠️ Connection error. Please check if the backend is running.');
     }
 }
 
-function appendMessage(role, text) {
+function appendMessage(role, text, seatSelection = null, accountOffer = null, accountSignup = null, paymentRequired = null) {
     const container = document.getElementById('chatMessages');
     const div = document.createElement('div');
     div.className = `chat-message ${role}`;
-    div.innerHTML = `<div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>`;
+    let body = role === 'assistant' ? formatAssistantMessage(text) : escapeHTML(text).replace(/\n/g, '<br>');
+    if (role === 'assistant') {
+        const bookingIds = [...new Set((text.match(/BK\d{5}/g) || []))];
+        if (bookingIds.length && !paymentRequired) {
+            body += '<div class="chat-actions">' + bookingIds.map(id =>
+                `<a class="btn btn-outline btn-small" href="/tickets/${encodeURIComponent(id)}.pdf" target="_blank" rel="noopener">Download ${id} PDF</a>`
+            ).join('') + '</div>';
+        }
+        if (seatSelection) {
+            body += renderChatSeatPicker(seatSelection);
+        }
+        if (accountOffer) {
+            body += renderAccountOffer(accountOffer);
+        }
+        if (accountSignup) {
+            body += renderChatAccountSignup(accountSignup);
+        }
+        if (paymentRequired) {
+            body += renderChatPayment(paymentRequired);
+        }
+    }
+    div.innerHTML = `<div class="msg-bubble">${body}</div>`;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
+}
+
+function renderChatPayment(payload) {
+    const formId = 'payment-form-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+    return `
+        <div class="payment-card chat-payment-card" id="${formId}">
+            <div class="payment-title">Demo Payment</div>
+            <p class="payment-note">Seats are held for 5 minutes. No real money will be charged.</p>
+            <div class="payment-countdown">${escapeHTML(payload.expires_at || '')}</div>
+            <div class="form-grid compact-form-grid">
+                <div class="form-group">
+                    <label class="form-label">Method</label>
+                    <select class="form-select" data-payment-provider>
+                        <option value="bkash">bKash Demo</option>
+                        <option value="nagad">Nagad Demo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Wallet Mobile</label>
+                    <input class="form-input" data-payment-phone placeholder="01309183295">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Amount</label>
+                    <input class="form-input" data-payment-amount value="${payload.amount}" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">PIN</label>
+                    <input class="form-input" type="password" data-payment-pin placeholder="Demo PIN 1234">
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button class="btn btn-primary btn-small" type="button" onclick="payChatBooking('${formId}', '${payload.booking_id}')">Pay ${payload.amount} Taka</button>
+            </div>
+        </div>`;
+}
+
+async function payChatBooking(formId, bookingId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    const provider = form.querySelector('[data-payment-provider]').value;
+    let phone = form.querySelector('[data-payment-phone]').value.trim();
+    if (phone.startsWith('+88')) phone = phone.slice(3);
+    const amount = parseInt(form.querySelector('[data-payment-amount]').value);
+    const pin = form.querySelector('[data-payment-pin]').value.trim();
+    if (!phone || !pin) {
+        showToast('Enter wallet mobile and PIN.', 'error');
+        return;
+    }
+    form.querySelectorAll('button, input, select').forEach(el => el.disabled = true);
+    const typingId = appendTyping();
+    try {
+        const res = await fetch('/payments/demo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ booking_id: bookingId, provider, phone, amount, pin, session_id: sessionId })
+        });
+        const data = await res.json();
+        removeTyping(typingId);
+        if (!res.ok) {
+            appendMessage('assistant', data.detail || 'Payment failed.');
+            form.querySelectorAll('button, input, select').forEach(el => el.disabled = false);
+            return;
+        }
+        appendMessage('assistant', `${data.message}\n\nBooking ID: ${data.booking.booking_id}`, null, data.account_offer || null);
+        showToast('Payment successful.');
+    } catch(e) {
+        removeTyping(typingId);
+        appendMessage('assistant', 'Connection error during payment.');
+        form.querySelectorAll('button, input, select').forEach(el => el.disabled = false);
+    }
+}
+
+function renderAccountOffer(payload) {
+    return `
+        <div class="chat-account-card">
+            <div class="chat-account-title">Create BusGo account?</div>
+            <div class="chat-account-meta">
+                Next time booking korte name ar mobile abar dite hobe na.
+            </div>
+            <div class="chat-actions">
+                <button class="btn btn-primary btn-small" type="button" onclick="sendAccountOfferReply('ok account khulte chai')">Yes, create</button>
+                <button class="btn btn-outline btn-small" type="button" onclick="sendAccountOfferReply('na pore korbo')">Not now</button>
+            </div>
+        </div>`;
+}
+
+function renderChatAccountSignup(payload) {
+    const formId = 'account-form-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+    return `
+        <div class="chat-account-card" id="${formId}">
+            <div class="chat-account-title">Finish account setup</div>
+            <div class="form-grid compact-form-grid">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input class="form-input" value="${escapeHTML(payload.name || '')}" disabled>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input class="form-input" value="${escapeHTML(payload.phone || '')}" disabled>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input class="form-input" type="password" data-chat-password placeholder="Minimum 6 characters">
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button class="btn btn-primary btn-small" type="button" onclick="createChatAccount('${formId}')">Create Account</button>
+            </div>
+        </div>`;
+}
+
+async function sendAccountOfferReply(text) {
+    appendMessage('user', text);
+    const typingId = appendTyping();
+    try {
+        const res = await fetch('/query/smart', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: text, session_id: sessionId })
+        });
+        const data = await res.json();
+        removeTyping(typingId);
+        appendMessage(
+            'assistant',
+            data.message || 'Sorry, I could not process that.',
+            data.seat_selection || null,
+            data.account_offer || null,
+            data.account_signup || null,
+            data.payment_required || null
+        );
+    } catch(e) {
+        removeTyping(typingId);
+        appendMessage('assistant', 'Connection error.');
+    }
+}
+
+async function createChatAccount(formId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    const input = form.querySelector('[data-chat-password]');
+    const password = input.value;
+    if (!password || password.length < 6) {
+        showToast('Password must be at least 6 characters.', 'error');
+        return;
+    }
+    form.querySelectorAll('button, input').forEach(el => el.disabled = true);
+    const typingId = appendTyping();
+    try {
+        const res = await fetch('/chat/create-account', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: sessionId, password })
+        });
+        const data = await res.json();
+        removeTyping(typingId);
+        if (!res.ok) {
+            appendMessage('assistant', data.detail || 'Could not create account.');
+            form.querySelectorAll('button, input').forEach(el => el.disabled = false);
+            return;
+        }
+        appendMessage('assistant', data.message || 'Account created successfully.');
+        if (typeof showToast === 'function') {
+            showToast('Account created successfully.');
+        }
+        if (typeof checkAuthStatus === 'function') {
+            checkAuthStatus();
+        }
+    } catch(e) {
+        removeTyping(typingId);
+        appendMessage('assistant', 'Account create korte giye ekta problem holo. Page refresh kore login kore dekhen, account already create hoye thakte pare.');
+        form.querySelectorAll('button, input').forEach(el => el.disabled = false);
+    }
+}
+
+function formatAssistantMessage(text) {
+    const lines = String(text ?? '').split(/\r?\n/);
+    const html = [];
+    let listOpen = false;
+
+    function closeList() {
+        if (listOpen) {
+            html.push('</ul>');
+            listOpen = false;
+        }
+    }
+
+    lines.forEach(line => {
+        const trimmed = line.trim();
+        if (!trimmed) {
+            closeList();
+            return;
+        }
+
+        const bulletMatch = trimmed.match(/^(?:[-*]|•)\s+(.+)$/);
+        if (bulletMatch) {
+            if (!listOpen) {
+                html.push('<ul class="chat-list">');
+                listOpen = true;
+            }
+            html.push(`<li>${formatInlineMarkdown(bulletMatch[1])}</li>`);
+            return;
+        }
+
+        closeList();
+        html.push(`<p>${formatInlineMarkdown(trimmed)}</p>`);
+    });
+
+    closeList();
+    return html.join('');
+}
+
+function formatInlineMarkdown(value) {
+    return escapeHTML(value)
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
+function renderChatSeatPicker(payload) {
+    const widgetId = 'seat-widget-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+    chatSeatState[widgetId] = { payload, selected: new Set() };
+    const rows = (payload.layout?.rows || []).map(row => {
+        const seats = row.map((seat, index) => {
+            const gap = index === 2 ? '<span class="seat-aisle"></span>' : '';
+            const classes = [
+                'seat',
+                seat.status,
+                seat.is_window ? 'window' : '',
+                seat.is_female_reserved ? 'female-reserved' : ''
+            ].filter(Boolean).join(' ');
+            const disabled = seat.status === 'booked' ? 'disabled' : '';
+            return `${gap}<button type="button" class="${classes}" ${disabled} onclick="toggleChatSeat('${widgetId}', '${seat.label}')">${seat.label}</button>`;
+        }).join('');
+        return `<div class="seat-row">${seats}</div>`;
+    }).join('');
+
+    return `
+        <div class="chat-seat-card" id="${widgetId}">
+            <div class="chat-seat-title">${escapeHTML(payload.provider || '')} ${escapeHTML(payload.bus_type || '')} ${escapeHTML(payload.departure_time || '')}</div>
+            <div class="chat-seat-meta">
+                ${escapeHTML(payload.from_district || '')} to ${escapeHTML(payload.to_district || '')} ·
+                ${escapeHTML(payload.travel_date || '')} ·
+                ${payload.num_passengers} passenger(s) ·
+                ${payload.total_amount} Taka
+            </div>
+            <div class="seat-legend compact">
+                <span><i class="seat-dot available"></i>Available</span>
+                <span><i class="seat-dot selected"></i>Selected</span>
+                <span><i class="seat-dot booked"></i>Booked</span>
+                <span><i class="seat-dot female"></i>Female reserved</span>
+                <span><i class="seat-window-mark"></i>Window</span>
+            </div>
+            <div class="bus-shell chat-bus-shell">
+                <div class="driver-row">Driver</div>
+                <div class="seat-map">${rows}</div>
+            </div>
+            <div class="chat-seat-footer">
+                <div class="seat-summary" data-seat-summary>Select ${payload.num_passengers} seat(s)</div>
+                <div class="chat-actions">
+                    <button class="btn btn-outline btn-small" type="button" onclick="autoSelectChatSeats('${widgetId}')">Auto Select</button>
+                    <button class="btn btn-primary btn-small" type="button" onclick="confirmChatSeats('${widgetId}')">Confirm Seats</button>
+                </div>
+            </div>
+        </div>`;
+}
+
+function toggleChatSeat(widgetId, label) {
+    const state = chatSeatState[widgetId];
+    if (!state) return;
+    const n = parseInt(state.payload.num_passengers) || 1;
+    if (state.selected.has(label)) {
+        state.selected.delete(label);
+    } else {
+        if (state.selected.size >= n) {
+            showToast(`Select only ${n} seat(s).`, 'error');
+            return;
+        }
+        state.selected.add(label);
+    }
+    updateChatSeatWidget(widgetId);
+}
+
+function autoSelectChatSeats(widgetId) {
+    const state = chatSeatState[widgetId];
+    if (!state) return;
+    const n = parseInt(state.payload.num_passengers) || 1;
+    const seats = (state.payload.layout?.rows || []).flat();
+    const regular = seats.filter(s => s.status === 'available' && !s.is_female_reserved).map(s => s.label);
+    const reserved = seats.filter(s => s.status === 'available' && s.is_female_reserved).map(s => s.label);
+    state.selected = new Set([...regular, ...reserved].slice(0, n));
+    updateChatSeatWidget(widgetId);
+}
+
+function updateChatSeatWidget(widgetId) {
+    const state = chatSeatState[widgetId];
+    const widget = document.getElementById(widgetId);
+    if (!state || !widget) return;
+    widget.querySelectorAll('.seat').forEach(btn => {
+        btn.classList.toggle('selected', state.selected.has(btn.textContent.trim()));
+    });
+    const n = parseInt(state.payload.num_passengers) || 1;
+    const seats = [...state.selected];
+    const summary = widget.querySelector('[data-seat-summary]');
+    summary.textContent = seats.length ? `Selected ${seats.length}/${n}: ${seats.join(', ')}` : `Select ${n} seat(s)`;
+}
+
+async function confirmChatSeats(widgetId) {
+    const state = chatSeatState[widgetId];
+    const widget = document.getElementById(widgetId);
+    if (!state || !widget) return;
+    const n = parseInt(state.payload.num_passengers) || 1;
+    if (state.selected.size !== n) {
+        showToast(`Please select exactly ${n} seat(s).`, 'error');
+        return;
+    }
+
+    widget.querySelectorAll('button').forEach(btn => btn.disabled = true);
+    const typingId = appendTyping();
+    try {
+        const res = await fetch('/chat/confirm-seat-booking', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                session_id: sessionId,
+                selected_seats: [...state.selected]
+            })
+        });
+        const data = await res.json();
+        removeTyping(typingId);
+        if (!res.ok) {
+            appendMessage('assistant', data.detail || 'Could not confirm those seats.');
+            widget.querySelectorAll('button').forEach(btn => btn.disabled = false);
+            return;
+        }
+        appendMessage(
+            'assistant',
+            data.message || 'Booking confirmed.',
+            data.seat_selection || null,
+            data.account_offer || null,
+            data.account_signup || null,
+            data.payment_required || null
+        );
+    } catch(e) {
+        removeTyping(typingId);
+        appendMessage('assistant', 'Connection error while confirming seats.');
+        widget.querySelectorAll('button').forEach(btn => btn.disabled = false);
+    }
+}
+
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    }[ch]));
 }
 
 function appendTyping() {

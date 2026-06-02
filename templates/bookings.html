@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% block title %}My Bookings — BusGo{% endblock %}
+﻿{% extends "base.html" %}
+{% block title %}My Bookings â€” BusGo{% endblock %}
 {% block content %}
 
 <div class="page-header">
@@ -9,8 +9,8 @@
 
 <div class="card search-card">
     <div class="search-row">
-        <input type="text" id="phoneInput" class="form-input" placeholder="Enter phone number — 01XXXXXXXXX" style="flex:1">
-        <button class="btn btn-primary" onclick="searchBookings()">🔍 Search</button>
+        <input type="text" id="phoneInput" class="form-input" placeholder="Enter phone number â€” 01XXXXXXXXX" style="flex:1">
+        <button class="btn btn-primary" onclick="searchBookings()">ðŸ” Search</button>
     </div>
 </div>
 
@@ -33,13 +33,13 @@ async function searchBookings() {
         const data = await res.json();
 
         if (!res.ok) {
-            result.innerHTML = `<div class="empty-state">📭 No bookings found for this number.</div>`;
+            result.innerHTML = `<div class="empty-state">ðŸ“­ No bookings found for this number.</div>`;
             return;
         }
 
         const bookings = data.bookings || [];
         if (!bookings.length) {
-            result.innerHTML = `<div class="empty-state">📭 No bookings found.</div>`;
+            result.innerHTML = `<div class="empty-state">ðŸ“­ No bookings found.</div>`;
             return;
         }
 
@@ -55,10 +55,11 @@ async function searchBookings() {
                         <div class="booking-field"><span>Passenger</span><strong>${b.name}</strong></div>
                         <div class="booking-field"><span>Phone</span><strong>${b.phone}</strong></div>
                         <div class="booking-field"><span>Passengers</span><strong>${b.num_passengers}</strong></div>
+                        <div class="booking-field"><span>Seats</span><strong>${b.seat_numbers || '-'}</strong></div>
                     </div>
                     <div class="booking-col">
                         <div class="booking-field"><span>Provider</span><strong>${b.bus_provider}</strong></div>
-                        <div class="booking-field"><span>Route</span><strong>${b.from_district} → ${b.to_district}</strong></div>
+                        <div class="booking-field"><span>Route</span><strong>${b.from_district} â†’ ${b.to_district}</strong></div>
                         <div class="booking-field"><span>Dropping Point</span><strong>${b.dropping_point}</strong></div>
                         <div class="booking-field"><span>Travel Date</span><strong>${b.travel_date}</strong></div>
                     </div>
@@ -68,13 +69,13 @@ async function searchBookings() {
                         <div class="booking-field"><span>Booked On</span><strong>${b.booking_date.slice(0,10)}</strong></div>
                     </div>
                 </div>
-                ${b.status === 'active' ? `
                 <div class="booking-footer">
-                    <button class="btn btn-danger" onclick="cancelBooking('${b.booking_id}')">❌ Cancel Booking</button>
-                </div>` : ''}
+                    <a class="btn btn-outline" href="/tickets/${encodeURIComponent(b.booking_id)}.pdf" target="_blank" rel="noopener">Download Ticket PDF</a>
+                    ${b.status === 'active' ? `<button class="btn btn-danger" onclick="cancelBooking('${b.booking_id}')">Cancel Booking</button>` : ''}
+                </div>
             </div>`).join('');
     } catch(e) {
-        result.innerHTML = `<div class="empty-state">⚠️ Connection error. Is the backend running?</div>`;
+        result.innerHTML = `<div class="empty-state">âš ï¸ Connection error. Is the backend running?</div>`;
     }
 }
 
@@ -83,13 +84,15 @@ async function cancelBooking(bookingId) {
     try {
         const res = await fetch(`/bookings/${bookingId}?permanent=false`, { method: 'DELETE' });
         if (res.ok) {
+            const data = await res.json();
             const item = document.getElementById(`booking-${bookingId}`);
             item.querySelector('.booking-status').textContent = 'CANCELLED';
             item.querySelector('.booking-status').className = 'booking-status status-cancelled';
-            item.querySelector('.booking-footer').remove();
+            const cancelButton = item.querySelector('.btn-danger');
+            if (cancelButton) cancelButton.remove();
             item.classList.remove('active');
             item.classList.add('cancelled');
-            showToast('Booking cancelled successfully.', 'success');
+            showToast(data.message || 'Booking cancelled successfully.', 'success');
         } else {
             const d = await res.json();
             showToast(d.detail || 'Failed to cancel.', 'error');

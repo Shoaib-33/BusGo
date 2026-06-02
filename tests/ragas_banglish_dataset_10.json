@@ -1,0 +1,52 @@
+[
+  {
+    "id": "banglish_dhaka_rangpur_cheapest_ac",
+    "user_input": "Dhaka theke Rangpur e shobcheye kom dam e kon AC bus ase?",
+    "reference": "Dhaka to Rangpur cheapest AC bus is National Travels AC. Fare is 720 Taka. Departure times are 10:00 and 22:00."
+  },
+  {
+    "id": "banglish_dhaka_rangpur_cheapest_non_ac",
+    "user_input": "Dhaka theke Rangpur e kom dam er Non AC bus konta?",
+    "reference": "Dhaka to Rangpur cheapest Non-AC bus is National Travels Non-AC. Fare is 480 Taka. Departure times are 07:00 and 18:00."
+  },
+  {
+    "id": "banglish_dhaka_chattogram_cheapest",
+    "user_input": "Dhaka theke Chattogram jawar shobcheye kom dam er bus konta?",
+    "reference": "Dhaka to Chattogram cheapest bus is Shyamoli Paribahan Non-AC. Fare is 480 Taka. Departure times are 05:00, 10:00, and 16:00."
+  },
+  {
+    "id": "banglish_dhaka_coxbazar_cheapest_ac",
+    "user_input": "Dhaka theke Coxbazar e kom dam e AC bus kon jay?",
+    "reference": "Dhaka to Cox's Bazar cheapest AC bus is Shyamoli Paribahan AC. Fare is 1200 Taka. Departure times are 07:30, 21:00, and 23:30."
+  },
+  {
+    "id": "banglish_dhaka_rajshahi_under_500",
+    "user_input": "Dhaka theke Rajshahi 500 takar niche kon kon bus ase?",
+    "reference": "Dhaka to Rajshahi services under 500 Taka are Soudia Non-AC for 400 Taka at 06:00, 10:30, and 16:30, and National Travels Non-AC for 420 Taka at 07:00 and 14:00."
+  },
+  {
+    "id": "banglish_dhaka_sylhet_cheapest",
+    "user_input": "Dhaka theke Sylhet er cheapest bus ar time bolo",
+    "reference": "Dhaka to Sylhet cheapest bus is S.A. Paribahan Non-AC. Fare is 450 Taka. Departure times are 06:00, 09:00, and 15:00."
+  },
+  {
+    "id": "banglish_chattogram_coxbazar_cheapest",
+    "user_input": "Chattogram theke Coxbazar e kom dam er bus konta?",
+    "reference": "Chattogram to Cox's Bazar cheapest bus is Shyamoli Paribahan Non-AC. Fare is 280 Taka. Departure times are 05:00, 09:00, and 16:00."
+  },
+  {
+    "id": "banglish_chattogram_sylhet_bus",
+    "user_input": "Chattogram theke Sylhet e kon bus ase ar time koto?",
+    "reference": "Chattogram to Sylhet has Ena Paribahan and Desh Travel. Ena Paribahan Non-AC is 500 Taka at 06:30 and 13:00, Ena AC is 775 Taka at 08:00 and 21:30, Desh Travel Non-AC is 480 Taka at 06:00 and 14:00, and Desh Travel AC is 720 Taka at 08:30 and 21:00."
+  },
+  {
+    "id": "banglish_hanif_contact",
+    "user_input": "Hanif er contact number ar address dao",
+    "reference": "Hanif Enterprise contact details include helpline 16460, Gabtoli counter 01713-049540, official address 1/1 Mirpur Road, Gabtoli Bus Terminal, Dhaka-1216, and email info@hanifenterprise.com."
+  },
+  {
+    "id": "banglish_ena_privacy",
+    "user_input": "Ena Paribahan er privacy policy ki?",
+    "reference": "Ena Paribahan collects personal details such as names, phone numbers, travel history, and booking preferences. It stores information securely with limited authorized access, shares information only for legal or operational needs, and lists StarNet, Plot 97/A, 2nd Floor, Road-7, Sector-4, Uttara C/A, Dhaka-1230 with Mohakhali contacts 01760-737650 and 01619-737650."
+  }
+]

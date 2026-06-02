@@ -2,7 +2,6 @@ fastapi
 uvicorn[standard]
 pydantic
 requests
-streamlit==1.40.0
 sqlite-utils==3.35.1
 python-dotenv
 langchain==0.3.27

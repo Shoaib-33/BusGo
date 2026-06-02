@@ -1,0 +1,387 @@
+{% extends "base.html" %}
+{% block title %}Admin - BusGo{% endblock %}
+{% block content %}
+
+<div class="page-header dashboard-header">
+    <div>
+        <h1 class="page-title">Admin <span class="accent">Dashboard</span></h1>
+        <p id="adminSub" class="page-sub">System-wide bookings, routes, users, reports, and refunds</p>
+    </div>
+    <button class="btn btn-outline" type="button" onclick="logout()">Logout</button>
+</div>
+
+<div id="adminDenied" class="empty-state hidden">
+    Admin access required.
+    <div class="chat-actions" style="justify-content:center">
+        <a class="btn btn-primary" href="/login-page">Go to Login</a>
+    </div>
+</div>
+
+<div id="adminContent" class="admin-shell hidden">
+    <aside class="admin-sidebar-panel">
+        <div class="admin-brand">
+            <strong>Admin Panel</strong>
+            <span>BusGo system</span>
+        </div>
+        <button class="admin-menu-item active" type="button" data-panel-button="dashboard" onclick="showAdminPanel('dashboard')">Dashboard</button>
+        <button class="admin-menu-item" type="button" data-panel-button="bookings" onclick="showAdminPanel('bookings')">Bookings</button>
+        <button class="admin-menu-item" type="button" data-panel-button="routes" onclick="showAdminPanel('routes')">Routes</button>
+        <button class="admin-menu-item" type="button" data-panel-button="buses" onclick="showAdminPanel('buses')">Buses & seats</button>
+        <button class="admin-menu-item" type="button" data-panel-button="users" onclick="showAdminPanel('users')">Users</button>
+        <button class="admin-menu-item" type="button" data-panel-button="operators" onclick="showAdminPanel('operators')">Operators</button>
+        <button class="admin-menu-item" type="button" data-panel-button="reports" onclick="showAdminPanel('reports')">Reports</button>
+        <button class="admin-menu-item" type="button" data-panel-button="refunds" onclick="showAdminPanel('refunds')">Refunds</button>
+        <button class="admin-menu-item" type="button" data-panel-button="settings" onclick="showAdminPanel('settings')">Settings</button>
+    </aside>
+
+    <section class="admin-workspace">
+        <div data-admin-panel="dashboard">
+            <div class="dashboard-stats">
+                <div class="stat-card"><span>Today's Bookings</span><strong id="statToday">0</strong></div>
+                <div class="stat-card"><span>Platform Revenue</span><strong><span id="statRevenue">0</span> Taka</strong></div>
+                <div class="stat-card"><span>Active Routes</span><strong id="statRoutes">0</strong></div>
+                <div class="stat-card"><span>Pending Refunds</span><strong id="statRefunds">0</strong></div>
+                <div class="stat-card"><span>Total Bookings</span><strong id="statBookings">0</strong></div>
+            </div>
+
+            <div class="dashboard-section">
+                <div class="section-heading">
+                    <h2>Recent Bookings</h2>
+                    <span id="recentBookingCount" class="result-count">0 booking(s)</span>
+                </div>
+                <div id="adminRecentBookings"></div>
+            </div>
+        </div>
+
+        <div data-admin-panel="bookings" class="hidden">
+            <div class="section-heading">
+                <h2>Bookings</h2>
+                <span id="bookingCount" class="result-count">0 booking(s)</span>
+            </div>
+            <div id="adminBookings"></div>
+        </div>
+
+        <div data-admin-panel="routes" class="hidden">
+            <div class="section-heading">
+                <h2>Routes</h2>
+                <span id="routeCount" class="result-count">0 route(s)</span>
+            </div>
+            <div id="adminRoutes"></div>
+        </div>
+
+        <div data-admin-panel="buses" class="hidden">
+            <div class="section-heading">
+                <h2>Buses & Seats</h2>
+                <span id="serviceCount" class="result-count">0 service(s)</span>
+            </div>
+            <div id="adminServices"></div>
+        </div>
+
+        <div data-admin-panel="users" class="hidden">
+            <div class="section-heading">
+                <h2>Users</h2>
+                <span id="userCount" class="result-count">0 user(s)</span>
+            </div>
+            <div id="adminUsers"></div>
+        </div>
+
+        <div data-admin-panel="operators" class="hidden">
+            <div class="section-heading">
+                <h2>Operators</h2>
+                <span id="operatorCount" class="result-count">0 operator(s)</span>
+            </div>
+            <div id="adminOperators"></div>
+        </div>
+
+        <div data-admin-panel="reports" class="hidden">
+            <div class="section-heading">
+                <h2>Reports</h2>
+                <span class="result-count">5% commission model</span>
+            </div>
+            <div id="adminReports"></div>
+        </div>
+
+        <div data-admin-panel="refunds" class="hidden">
+            <div class="section-heading">
+                <h2>Refund Requests</h2>
+                <span id="refundCount" class="result-count">0 request(s)</span>
+            </div>
+            <div id="adminRefunds"></div>
+        </div>
+
+        <div data-admin-panel="settings" class="hidden">
+            <div class="section-heading">
+                <h2>Settings</h2>
+                <span class="result-count">Read-only demo settings</span>
+            </div>
+            <div id="adminSettings"></div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+let adminData = {};
+
+document.addEventListener('DOMContentLoaded', loadAdminDashboard);
+
+async function loadAdminDashboard() {
+    try {
+        const res = await fetch('/admin/dashboard');
+        if (res.status === 401 || res.status === 403) {
+            document.getElementById('adminDenied').classList.remove('hidden');
+            return;
+        }
+        const data = await res.json();
+        if (!res.ok) return showToast(data.detail || 'Could not load admin dashboard.', 'error');
+        adminData = data;
+        renderAdminDashboard(data);
+    } catch(e) {
+        showToast('Connection error while loading admin dashboard.', 'error');
+    }
+}
+
+function showAdminPanel(panel) {
+    document.querySelectorAll('[data-admin-panel]').forEach(section => {
+        section.classList.toggle('hidden', section.dataset.adminPanel !== panel);
+    });
+    document.querySelectorAll('[data-panel-button]').forEach(button => {
+        button.classList.toggle('active', button.dataset.panelButton === panel);
+    });
+}
+
+function renderAdminDashboard(data) {
+    const stats = data.stats || {};
+    const bookings = data.bookings || [];
+    const users = data.users || [];
+    const refunds = data.refunds || [];
+    const routes = data.routes || [];
+    const operators = data.operators || [];
+    const services = buildServiceRows(bookings);
+
+    document.getElementById('adminSub').textContent = `${data.admin?.name || 'Admin'} - ${data.admin?.email || data.admin?.phone || ''}`;
+    document.getElementById('statToday').textContent = stats.today_bookings || 0;
+    document.getElementById('statBookings').textContent = stats.total_bookings || 0;
+    document.getElementById('statRevenue').textContent = formatMoney(stats.platform_revenue || 0);
+    document.getElementById('statRoutes').textContent = stats.active_routes || 0;
+    document.getElementById('statRefunds').textContent = stats.pending_refunds || 0;
+
+    document.getElementById('recentBookingCount').textContent = `${bookings.slice(0, 8).length} booking(s)`;
+    document.getElementById('bookingCount').textContent = `${bookings.length} booking(s)`;
+    document.getElementById('routeCount').textContent = `${routes.length} route(s)`;
+    document.getElementById('serviceCount').textContent = `${services.length} service(s)`;
+    document.getElementById('userCount').textContent = `${users.length} user(s)`;
+    document.getElementById('operatorCount').textContent = `${operators.length} operator(s)`;
+    document.getElementById('refundCount').textContent = `${refunds.length} request(s)`;
+
+    document.getElementById('adminRecentBookings').innerHTML = bookings.length
+        ? bookings.slice(0, 8).map(renderAdminBooking).join('')
+        : '<div class="empty-state">No bookings yet.</div>';
+    document.getElementById('adminBookings').innerHTML = bookings.length
+        ? bookings.map(renderAdminBooking).join('')
+        : '<div class="empty-state">No bookings yet.</div>';
+    document.getElementById('adminRoutes').innerHTML = routes.length
+        ? routes.map(renderRoute).join('')
+        : '<div class="empty-state">No routes found.</div>';
+    document.getElementById('adminServices').innerHTML = services.length
+        ? services.map(renderService).join('')
+        : '<div class="empty-state">No active bus services right now.</div>';
+    document.getElementById('adminUsers').innerHTML = users.length
+        ? users.map(renderAdminUser).join('')
+        : '<div class="empty-state">No users yet.</div>';
+    document.getElementById('adminOperators').innerHTML = operators.length
+        ? operators.map(renderOperator).join('')
+        : '<div class="empty-state">No operators found.</div>';
+    document.getElementById('adminReports').innerHTML = renderReports(stats);
+    document.getElementById('adminRefunds').innerHTML = refunds.length
+        ? refunds.map(renderRefund).join('')
+        : '<div class="empty-state">No refund requests.</div>';
+    document.getElementById('adminSettings').innerHTML = renderSettings(stats);
+    document.getElementById('adminContent').classList.remove('hidden');
+}
+
+function renderAdminBooking(booking) {
+    return `
+        <div class="booking-item dashboard-ticket">
+            <div class="booking-header">
+                <div>
+                    <div class="booking-id">${escapeHTML(booking.booking_id)}</div>
+                    <div class="ticket-route">${escapeHTML(booking.from_district)} to ${escapeHTML(booking.to_district)}</div>
+                </div>
+                <span class="booking-status status-${escapeHTML(booking.status)}">${escapeHTML(booking.status).toUpperCase()}</span>
+            </div>
+            <div class="booking-body">
+                <div class="booking-field"><span>Passenger</span><strong>${escapeHTML(booking.name)}</strong></div>
+                <div class="booking-field"><span>Phone</span><strong>${escapeHTML(booking.phone)}</strong></div>
+                <div class="booking-field"><span>Provider</span><strong>${escapeHTML(booking.bus_provider)}</strong></div>
+                <div class="booking-field"><span>Date</span><strong>${escapeHTML(booking.travel_date)} - ${escapeHTML(booking.departure_time || '-')}</strong></div>
+                <div class="booking-field"><span>Seats</span><strong>${escapeHTML(booking.seat_numbers || '-')}</strong></div>
+                <div class="booking-field"><span>Payment</span><strong>${escapeHTML(booking.payment_status || '-')}</strong></div>
+                <div class="booking-field total-field"><span>Total</span><strong>${escapeHTML(booking.total_amount)} Taka</strong></div>
+            </div>
+        </div>`;
+}
+
+function renderRoute(route) {
+    const schedules = route.provider_schedules || [];
+    const providers = schedules.map(item => item.provider).filter(Boolean).join(', ');
+    return `
+        <div class="booking-item dashboard-ticket">
+            <div class="booking-header">
+                <div>
+                    <div class="booking-id">${escapeHTML(route.from)} to ${escapeHTML(route.to)}</div>
+                    <div class="ticket-route">${escapeHTML(providers || 'No provider')}</div>
+                </div>
+                <span class="booking-status status-active">${schedules.length} SERVICE(S)</span>
+            </div>
+        </div>`;
+}
+
+function renderService(service) {
+    return `
+        <div class="booking-item dashboard-ticket">
+            <div class="booking-header">
+                <div>
+                    <div class="booking-id">${escapeHTML(service.provider)} ${escapeHTML(service.busType || '')}</div>
+                    <div class="ticket-route">${escapeHTML(service.route)} - ${escapeHTML(service.date)} - ${escapeHTML(service.time || '-')}</div>
+                </div>
+                <span class="booking-status status-active">${service.seats} SEAT(S)</span>
+            </div>
+        </div>`;
+}
+
+function renderAdminUser(user) {
+    return `
+        <div class="booking-item dashboard-ticket">
+            <div class="booking-header">
+                <div>
+                    <div class="booking-id">${escapeHTML(user.name)}</div>
+                    <div class="ticket-route">${escapeHTML(user.email || 'No email')} - ${escapeHTML(user.phone)}</div>
+                </div>
+                <span class="booking-status status-active">${escapeHTML(user.role).toUpperCase()}</span>
+            </div>
+        </div>`;
+}
+
+function renderOperator(operator) {
+    return `
+        <div class="booking-item dashboard-ticket">
+            <div class="booking-header">
+                <div>
+                    <div class="booking-id">${escapeHTML(operator.name)}</div>
+                    <div class="ticket-route">${escapeHTML(operator.email || operator.contact || operator.phone || 'Contact not listed')}</div>
+                </div>
+                <span class="booking-status status-active">OPERATOR</span>
+            </div>
+            <div class="booking-body">
+                <div class="booking-field"><span>Address</span><strong>${escapeHTML(operator.address || '-')}</strong></div>
+                <div class="booking-field"><span>Coverage</span><strong>${escapeHTML((operator.coverage_districts || []).join(', ') || '-')}</strong></div>
+            </div>
+        </div>`;
+}
+
+function renderRefund(refund) {
+    const canApprove = refund.status === 'requested';
+    return `
+        <div class="booking-item dashboard-ticket">
+            <div class="booking-header">
+                <div>
+                    <div class="booking-id">${escapeHTML(refund.refund_id)}</div>
+                    <div class="ticket-route">Booking ${escapeHTML(refund.booking_id)}</div>
+                </div>
+                <span class="booking-status status-${escapeHTML(refund.status)}">${escapeHTML(refund.status).toUpperCase()}</span>
+            </div>
+            <div class="booking-body">
+                <div class="booking-field total-field"><span>Amount</span><strong>${escapeHTML(refund.amount)} Taka</strong></div>
+                <div class="booking-field"><span>Requested</span><strong>${escapeHTML(refund.requested_at || '-')}</strong></div>
+                <div class="booking-field"><span>Processed</span><strong>${escapeHTML(refund.processed_at || '-')}</strong></div>
+            </div>
+            ${canApprove ? `
+                <div class="booking-footer">
+                    <button class="btn btn-primary btn-small" type="button" onclick="approveRefund('${escapeHTML(refund.refund_id)}')">
+                        Approve Refund
+                    </button>
+                </div>
+            ` : ''}
+        </div>`;
+}
+
+function renderReports(stats) {
+    return `
+        <div class="dashboard-stats">
+            <div class="stat-card"><span>Gross Ticket Sales</span><strong>${formatMoney(stats.gross_ticket_sales || 0)} Taka</strong></div>
+            <div class="stat-card"><span>Platform Revenue</span><strong>${formatMoney(stats.platform_revenue || 0)} Taka</strong></div>
+            <div class="stat-card"><span>Commission</span><strong>${escapeHTML(stats.commission_percent || 5)}%</strong></div>
+            <div class="stat-card"><span>Paid Bookings</span><strong>${escapeHTML(stats.paid_bookings || 0)}</strong></div>
+            <div class="stat-card"><span>Cancelled</span><strong>${escapeHTML(stats.cancelled_bookings || 0)}</strong></div>
+        </div>`;
+}
+
+function renderSettings(stats) {
+    return `
+        <div class="booking-item dashboard-ticket">
+            <div class="booking-body">
+                <div class="booking-field"><span>Admin creation</span><strong>Database only</strong></div>
+                <div class="booking-field"><span>Revenue model</span><strong>${escapeHTML(stats.commission_percent || 5)}% per paid ticket</strong></div>
+                <div class="booking-field"><span>Payment mode</span><strong>Demo bKash / Nagad</strong></div>
+                <div class="booking-field"><span>Refund SLA</span><strong>48 hours after admin approval request</strong></div>
+            </div>
+        </div>`;
+}
+
+function buildServiceRows(bookings) {
+    const serviceMap = {};
+    bookings.filter(booking => ['active', 'payment_pending'].includes(booking.status)).forEach(booking => {
+        const key = [
+            booking.bus_provider,
+            booking.from_district,
+            booking.to_district,
+            booking.travel_date,
+            booking.departure_time || '-',
+            booking.bus_type || '-'
+        ].join('|');
+        if (!serviceMap[key]) {
+            serviceMap[key] = {
+                provider: booking.bus_provider,
+                route: `${booking.from_district} to ${booking.to_district}`,
+                date: booking.travel_date,
+                time: booking.departure_time || '-',
+                busType: booking.bus_type || '-',
+                seats: 0
+            };
+        }
+        serviceMap[key].seats += parseSeats(booking.seat_numbers).length;
+    });
+    return Object.values(serviceMap);
+}
+
+function parseSeats(value) {
+    if (!value) return [];
+    return String(value).split(/[,\s]+/).map(item => item.trim()).filter(Boolean);
+}
+
+async function approveRefund(refundId) {
+    try {
+        const res = await fetch(`/refunds/approve/${encodeURIComponent(refundId)}`, { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok) return showToast(data.detail || 'Could not approve refund.', 'error');
+        showToast('Refund approved.');
+        loadAdminDashboard();
+    } catch(e) {
+        showToast('Connection error while approving refund.', 'error');
+    }
+}
+
+function formatMoney(value) {
+    return Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 2 });
+}
+
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    }[ch]));
+}
+</script>
+{% endblock %}

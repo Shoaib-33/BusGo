@@ -1,0 +1,774 @@
+{
+  "base_url": "http://127.0.0.1:8004",
+  "dataset": "tests\\golden_dataset.json",
+  "summary": {
+    "total": 27,
+    "passed": 11,
+    "failed": 13,
+    "errored": 3,
+    "pass_rate": 40.74,
+    "latency_ms": {
+      "avg": 15525.65,
+      "median": 14414.23,
+      "p90": 26085.16,
+      "max": 50414.29
+    }
+  },
+  "results": [
+    {
+      "id": "route_dhaka_rangpur_cheapest_banglish",
+      "category": "route_fare",
+      "type": "single_turn",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "Missing expected text: ['07:00', '18:00']"
+      ],
+      "latency_ms": 5222.71,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 5222.71,
+          "status": 200,
+          "message": "dhaka theke rangpur er kom dam e ticket dorkar",
+          "response_preview": "Sir, National Travels-er Non-AC bus-e Dhaka theke Rangpur-er fare 480 taka. Apnar dropping point Dhap. Ticket-ti confirm korar jonno kindly apnar nam, phone number, travel date ebong koyjon passenger jaben seta janaben ki?"
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 5223.03
+    },
+    {
+      "id": "route_dhaka_rangpur_ac_times",
+      "category": "route_fare",
+      "type": "single_turn",
+      "passed": true,
+      "error_type": null,
+      "failures": [],
+      "latency_ms": 26085.16,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 26085.16,
+          "status": 200,
+          "message": "dhaka theke rangpur e AC bus ase and time kokhon?",
+          "response_preview": "Sir, yes, there are AC bus services available from Dhaka to Rangpur. Here are the details:\n\n*   **Desh Travel**\n    *   Fare: 750 Taka\n    *   Departure times: 08:30, 23:00\n*   **National Travels**\n    *   Fare: 720 Taka\n    *   Departure times: 10:00, 22:00"
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 26085.37
+    },
+    {
+      "id": "route_rangpur_dhaka_cheapest",
+      "category": "route_fare",
+      "type": "single_turn",
+      "passed": true,
+      "error_type": null,
+      "failures": [],
+      "latency_ms": 10457.88,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 10457.88,
+          "status": 200,
+          "message": "Rangpur to Dhaka cheapest bus?",
+          "response_preview": "Sir, the cheapest bus service from Rangpur to Dhaka is provided by National Travels. Here are the details for their Non-AC service:\n\n*   **Provider:** National Travels\n*   **Bus Type:** Non-AC\n*   **Fare:** 480 Taka\n*   **Departure Times:** 07:00, 18:00"
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 10458.07
+    },
+    {
+      "id": "route_dhaka_chattogram_cheapest",
+      "category": "route_fare",
+      "type": "single_turn",
+      "passed": true,
+      "error_type": null,
+      "failures": [],
+      "latency_ms": 3687.03,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 3687.03,
+          "status": 200,
+          "message": "what is the cheapest bus from dhaka to chattogram?",
+          "response_preview": "Sir, the cheapest bus service from Dhaka to Chattogram is provided by Shyamoli Paribahan. Here are the details for their Non-AC service:\n\n*   **Provider:** Shyamoli Paribahan\n*   **Bus Type:** Non-AC\n*   **Fare:** 480 Taka\n*   **Departure Times:** 05:00, 10:00, 16:00"
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 3687.22
+    },
+    {
+      "id": "route_dhaka_cox_ac_cheapest",
+      "category": "route_fare",
+      "type": "single_turn",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "Missing expected text: ['Shyamoli Paribahan', 'AC', '1200', '07:30', '21:00', '23:30']"
+      ],
+      "latency_ms": 10999.61,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 10999.61,
+          "status": 200,
+          "message": "amar ticket lagbe dhaka theke coxbazar. Kom dam e ac bus kon jay?",
+          "response_preview": "I need a bit more information to complete the booking."
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 10999.81
+    },
+    {
+      "id": "route_dhaka_rajshahi_under_500",
+      "category": "route_fare",
+      "type": "single_turn",
+      "passed": true,
+      "error_type": null,
+      "failures": [],
+      "latency_ms": 13888.3,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 13888.3,
+          "status": 200,
+          "message": "Buses from Dhaka to Rajshahi under 500 taka?",
+          "response_preview": "Sir, for your travel from Dhaka to Rajshahi, there are a few options available under 500 Taka:\n\n*   **Soudia (Non-AC):** 400 Taka\n    *   Departure times: 06:00, 10:30, 16:30\n*   **National Travels (Non-AC):** 420 Taka\n    *   Departure times: 07:00, 14:00"
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 13888.5
+    },
+    {
+      "id": "route_sylhet_chattogram_no_direct",
+      "category": "route_fare",
+      "type": "single_turn",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "None of must_contain_any appeared: ['No scheduled service', 'no direct', \"I don't have that information\"]"
+      ],
+      "latency_ms": 15798.36,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 15798.36,
+          "status": 200,
+          "message": "Sylhet theke Chattogram er bus ase?",
+          "response_preview": "Sir, I am sorry to inform you that there are currently no scheduled bus services listed from Sylhet to Chattogram."
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 15798.63
+    },
+    {
+      "id": "route_reverse_chattogram_sylhet_available",
+      "category": "route_fare",
+      "type": "single_turn",
+      "passed": true,
+      "error_type": null,
+      "failures": [],
+      "latency_ms": 4104.97,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 4104.97,
+          "status": 200,
+          "message": "Chattogram theke Sylhet e kon bus ase?",
+          "response_preview": "Sir, Chattogram theke Sylhet route-e Ena Paribahan ebong Desh Travel-er bus service royeche. Apni nicher service gulo dekhte paren:\n\n**Ena Paribahan:**\n*   Non-AC: 500 Taka (Departure: 06:30, 13:00)\n*   AC: 775 Taka (Departure: 08:00, 21:30)\n\n**Desh Travel:**\n*   Non-AC: 480 Taka (Departure: 06:00, "
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 4105.17
+    },
+    {
+      "id": "policy_ena_privacy",
+      "category": "policy_rag",
+      "type": "single_turn",
+      "passed": true,
+      "error_type": null,
+      "failures": [],
+      "latency_ms": 14648.19,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 14648.19,
+          "status": 200,
+          "message": "What is Ena Paribahan's privacy policy?",
+          "response_preview": "Sir, Ena Paribahan is committed to protecting the privacy and personal data of its customers. Here are the key points of their privacy policy:\n\n*   **Data Collection:** They collect personal details such as names, phone numbers, travel history, and booking preferences to provide efficient booking an"
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 14648.4
+    },
+    {
+      "id": "policy_hanif_contact",
+      "category": "policy_rag",
+      "type": "single_turn",
+      "passed": true,
+      "error_type": null,
+      "failures": [],
+      "latency_ms": 24489.76,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 24489.76,
+          "status": 200,
+          "message": "Hanif er contact details dao",
+          "response_preview": "Sir, here are the contact details for Hanif Enterprise:\n\n*   **Customer Support:** 16460\n*   **Counter:** 01713-049540\n*   **Official Address:** Gabtoli / Mirpur region, Dhaka\n\nIf you need any further information regarding their policies, please let me know."
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 24489.96
+    },
+    {
+      "id": "policy_green_line_contact",
+      "category": "policy_rag",
+      "type": "single_turn",
+      "passed": true,
+      "error_type": null,
+      "failures": [],
+      "latency_ms": 17616.39,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 17616.39,
+          "status": 200,
+          "message": "Green Line contact and address?",
+          "response_preview": "Sir, here is the contact information and address for Green Line:\n\n*   **Phone:** 01713-445566, 09613316557, or +88 02 8315380\n*   **Email:** greenline@greenlineparibahan.com.bd\n*   **Address:** Kalyanpur, Dhaka and 9/2, Outer Circular Road, Momen Bagh, Rajarbagh, Dhaka 1217."
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 17616.59
+    },
+    {
+      "id": "policy_specific_refund_missing",
+      "category": "policy_rag",
+      "type": "single_turn",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "None of must_contain_any appeared: ['specific refund', 'refund information', \"I don't have\"]"
+      ],
+      "latency_ms": 5182.22,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 5182.22,
+          "status": 200,
+          "message": "Ena bus ki refund kore?",
+          "response_preview": "Sir, I do not have information regarding the refund policy for Ena bus. For assistance with this, please contact them directly:\n\n*   Mohakhali Bus Stand (Non-AC): 01760-737650\n*   Mohakhali Bus Stand (AC): 01619-737650"
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 5182.4
+    },
+    {
+      "id": "booking_chat_ready_then_seat_ui",
+      "category": "booking_flow",
+      "type": "multi_turn",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "None of must_contain_any appeared: ['seat', 'seat picker', 'select']",
+        "Response JSON missing key: seat_selection",
+        "seat_selection.provider expected 'National Travels', got None",
+        "seat_selection.from_district expected 'Dhaka', got None",
+        "seat_selection.to_district expected 'Rangpur', got None",
+        "seat_selection.bus_type expected 'Non-AC', got None",
+        "seat_selection.departure_time expected '07:00', got None",
+        "seat_selection.num_passengers expected 3, got None",
+        "seat_selection.fare expected 600, got None",
+        "seat_selection.total_amount expected 1800, got None",
+        "Seat confirmation HTTP 400: {'detail': 'No booking is waiting for seat selection'}",
+        "Missing expected text: ['Booking ID', 'National Travels', 'Dhaka', 'Rangpur', '2026-05-28', '07:00', 'A2', 'B2', 'C2', '1800']"
+      ],
+      "latency_ms": 14414.23,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 5157.58,
+          "status": 200,
+          "message": "dhaka theke rangpur er kom dam e ticket dorkar",
+          "response_preview": "Sir, National Travels-er Non-AC bus-e Dhaka theke Rangpur-er fare 480 taka. Apnar dropping point Dhap. Ticket-ti confirm korar jonno kindly apnar nam, phone number, travel date ebong koyjon passenger jaben, seta janaben ki?"
+        },
+        {
+          "kind": "chat",
+          "message_index": 2,
+          "latency_ms": 3782.2,
+          "status": 200,
+          "message": "ok ami jete chacchi 7 tay name Shoaib mobile 01309183295 3 jon",
+          "response_preview": "Sir, National Travels-er Non-AC bus-e Dhaka theke Rangpur-er fare 480 taka, ebong apnar dropping point Dhap. Apnar booking-ti complete korar jonno shudhu travel date-ti janale amra process korte parbo. Apni kobe jete chacchen?"
+        },
+        {
+          "kind": "chat",
+          "message_index": 3,
+          "latency_ms": 5452.15,
+          "status": 200,
+          "message": "28 tarikh may month er",
+          "response_preview": "I need a bit more information to complete the booking."
+        },
+        {
+          "kind": "seat_confirm",
+          "latency_ms": 22.3,
+          "status": 400,
+          "selected_seats": [
+            "A2",
+            "B2",
+            "C2"
+          ],
+          "response_preview": ""
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 14414.8
+    },
+    {
+      "id": "booking_chat_missing_name_phone",
+      "category": "booking_flow",
+      "type": "multi_turn",
+      "passed": true,
+      "error_type": null,
+      "failures": [],
+      "latency_ms": 12420.07,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 6254.04,
+          "status": 200,
+          "message": "amar dhaka theke rangpur ticket lagbe",
+          "response_preview": "Dhaka theke Rangpur-er ticket-er jonno apnar travel date, koto jon passenger jaben, ar apnar nam o phone number-ti janale amar jonno booking process kora shohoj hobe. Echarao, apni ki kono nirdishto bus provider ba dropping point-er kotha bhabchen?"
+        },
+        {
+          "kind": "chat",
+          "message_index": 2,
+          "latency_ms": 6166.03,
+          "status": 200,
+          "message": "3 jon jabo 11 june 2026",
+          "response_preview": "Dhonnobad, Sir. Apnar Dhaka theke Rangpur-er 3 jon-er ticket-er jonno amar kichu proyojoniyo tottho dorkar. Apni kon bus provider-e jete chachhen, Rangpur-e kothay namben (dropping point), ebong apnar nam o phone number-ti janale ami booking process-ti shuru korte parbo."
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 12420.43
+    },
+    {
+      "id": "booking_chat_total_fare_question_before_confirm",
+      "category": "booking_flow",
+      "type": "multi_turn",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "Missing expected text: ['4140']",
+        "None of must_contain_any appeared: ['1380', '15%', 'holiday']"
+      ],
+      "latency_ms": 29456.41,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 5148.17,
+          "status": 200,
+          "message": "amar ticket lagbe dhaka theke coxbazar kom dam e ac bus",
+          "response_preview": "Sir, Dhaka theke Cox's Bazar-er jonno Shyamoli Paribahan-er AC bus-er fare 1200 taka. Apni kon tarikh-e jete chan, koyti ticket lagbe, ebong apnar nam o phone number-ti janale ami booking-er proyojoniyo kaj shuru korte parbo."
+        },
+        {
+          "kind": "chat",
+          "message_index": 2,
+          "latency_ms": 2512.3,
+          "status": 200,
+          "message": "7:30 e jete chacchi 3 jon. jabo 11 june 2026",
+          "response_preview": "Sir, Shyamoli Paribahan-er 11 June 2026-er 07:30-er AC bus-er jonno apnar booking-er process-ti egiye niyechi. Apnar dropping point hobe Laldighirpar. Booking-ti confirm korar jonno kindly apnar nam ebong phone number-ti janaben ki?"
+        },
+        {
+          "kind": "chat",
+          "message_index": 3,
+          "latency_ms": 21795.94,
+          "status": 200,
+          "message": "total ticket fare koto porbe 3 jon",
+          "response_preview": "Sir, 3 jon-er jonno total fare hobe 4,140 taka. Apnar booking-ti confirm korar jonno kindly apnar nam ebong phone number-ti janaben ki?"
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 29456.88
+    },
+    {
+      "id": "booking_chat_seat_numbers_typed",
+      "category": "booking_flow",
+      "type": "multi_turn",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "Missing expected text: ['Soudia', 'Dhaka', 'Rajshahi']"
+      ],
+      "latency_ms": 19565.8,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 3634.68,
+          "status": 200,
+          "message": "I want to book Dhaka to Rajshahi cheapest ticket",
+          "response_preview": "Sir, Dhaka theke Rajshahi-r jonno Soudia-r Non-AC bus-e apnar ticket-er booking process-ti shuru korchi. Apnar dropping point Talaimari nirdharito ache. Booking-ti somponno korar jonno kindly apnar nam, phone number, travel date ebong kotojon passenger-er jonno ticket lagbe, seta janaben ki?"
+        },
+        {
+          "kind": "chat",
+          "message_index": 2,
+          "latency_ms": 2861.19,
+          "status": 200,
+          "message": "Name is Rahim phone 01711111111 2 passengers date 2026-12-31",
+          "response_preview": "Sir, apnar booking details confirm kora hoyeche. Soudia-r Non-AC bus-e Dhaka theke Rajshahi-r jonno apnar 2 jon passenger-er total fare 800 taka. Kindly nicher seat picker theke apnar pochondo moto 2ti seat select kore confirm korun, tarpor-i amra booking-ti complete korte parbo."
+        },
+        {
+          "kind": "chat",
+          "message_index": 3,
+          "latency_ms": 13069.93,
+          "status": 200,
+          "message": "A2 B2",
+          "response_preview": "Sir, apnar booking-ti successfully hold kora hoyeche. Apnar Booking ID: BK00021. Apni A2 ebong B2 seat-ti select korechen, jekhane total amount 800 taka. \n\nKindly note, ei seat-gulo matro 5 minute-er jonno hold kora hoyeche. Ticket-ti confirm korar jonno apnake 2026-05-30T12:55:32 er moddhe bKash ba"
+        }
+      ],
+      "created_booking_ids": [
+        "BK00021"
+      ],
+      "wall_latency_ms": 19587.49
+    },
+    {
+      "id": "booking_holiday_may_28_surcharge",
+      "category": "holiday_fare",
+      "type": "multi_turn",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "Missing expected text: ['Booking ID', '600', 'A2']",
+        "None of must_contain_any appeared: ['Demo Holiday', '25%', 'surcharge']"
+      ],
+      "latency_ms": 25493.76,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 3742.56,
+          "status": 200,
+          "message": "Book Dhaka to Rangpur National Travels Non-AC 07:00",
+          "response_preview": "I need a bit more information to complete the booking."
+        },
+        {
+          "kind": "chat",
+          "message_index": 2,
+          "latency_ms": 5006.79,
+          "status": 200,
+          "message": "Name Test User phone 01888888888 1 passenger date 2026-05-28",
+          "response_preview": "I need a bit more information to complete the booking."
+        },
+        {
+          "kind": "chat",
+          "message_index": 3,
+          "latency_ms": 16744.41,
+          "status": 200,
+          "message": "A2",
+          "response_preview": "Sir, apnar booking-er jonno shob information pawa geche, kintu passenger-er nam-ti ekhono missing ache. Kindly apnar full name-ti janale ami booking process-ti complete korte parbo."
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 25494.24
+    },
+    {
+      "id": "booking_holiday_june_11_surcharge",
+      "category": "holiday_fare",
+      "type": "multi_turn",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "Missing expected text: ['Shyamoli Paribahan']",
+        "None of must_contain_any appeared: ['Demo Long Weekend', '15%', 'surcharge']"
+      ],
+      "latency_ms": 33263.01,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 7434.54,
+          "status": 200,
+          "message": "Book Dhaka to Cox's Bazar Shyamoli AC 07:30",
+          "response_preview": "Sir, Shyamoli Paribahan-er 07:30-er AC bus-e Dhaka theke Cox's Bazar-er ticket-ti confirm korar jonno apnar kichu information dorkar. Kindly apnar full name, phone number, travel date, ebong koyjon passenger-er jonno ticket lagbe, seta janale ami booking-ti process korte parbo. Apnar dropping point "
+        },
+        {
+          "kind": "chat",
+          "message_index": 2,
+          "latency_ms": 12916.84,
+          "status": 200,
+          "message": "Name Karim phone 01722222222 3 passengers date 2026-06-11",
+          "response_preview": "Sir, apnar booking details ready hoyeche. Shyamoli Paribahan-er 07:30-er AC bus-e 3 jon passenger-er jonno total fare 4140 taka. Kindly seat picker theke apnar pochonder 3ti seat select kore confirm korun, taholei ami ticket-ti save korte parbo."
+        },
+        {
+          "kind": "chat",
+          "message_index": 3,
+          "latency_ms": 12911.63,
+          "status": 200,
+          "message": "A2 B2 C2",
+          "response_preview": "Sir, apnar booking-ti successfully hold kora hoyeche. Booking ID: BK00021. Apnar select kora seat-gulo holo A2, B2, C2. Total amount 4140 taka. \n\nEti ekta temporary hold, tai kindly 5 minute-er moddhe bKash ba Nagad demo payment-er maddhome payment complete korun. Payment complete na hole booking-ti"
+        }
+      ],
+      "created_booking_ids": [
+        "BK00021"
+      ],
+      "wall_latency_ms": 33279.4
+    },
+    {
+      "id": "seat_double_booking_rejected",
+      "category": "seat_selection",
+      "type": "stateful",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "Forbidden text present: ['Booking ID']",
+        "None of must_contain_any appeared: ['already booked', 'not available']",
+        "Booking was created unexpectedly: ['BK00021']"
+      ],
+      "latency_ms": 50414.29,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 16015.92,
+          "status": 200,
+          "message": "Book Dhaka to Rangpur National Travels Non-AC 07:00",
+          "response_preview": "Sir, National Travels-er Dhaka to Rangpur Non-AC bus-e 07:00-er trip-ti select hoyeche. Booking-ti complete korar jonno apnar travel date, koyjon passenger, dropping point, name ebong phone number-ti janale amra process korte parbo."
+        },
+        {
+          "kind": "chat",
+          "message_index": 2,
+          "latency_ms": 18698.12,
+          "status": 200,
+          "message": "Name Another User phone 01911111111 1 passenger date 2026-12-31",
+          "response_preview": "Sir, apnar booking details confirm hoyeche. Ekhon niche deya seat picker theke apnar proyojoniyo 1ti seat select kore confirm korun. National Travels-er ei trip-er fare 480 taka."
+        },
+        {
+          "kind": "chat",
+          "message_index": 3,
+          "latency_ms": 15700.25,
+          "status": 200,
+          "message": "A2",
+          "response_preview": "Sir, apnar seat A2 ti hold kora hoyeche. Apnar booking ID: BK00021. Total amount 480 taka. \n\nDhyan rakhben, ei seat-ti matro 5 minute-er jonno hold kora hoyeche. Payment complete na kora porjonto ticket-ti active ba confirm hobe na. Kindly bKash ba Nagad-er maddhome demo payment complete kore bookin"
+        }
+      ],
+      "created_booking_ids": [
+        "BK00021"
+      ],
+      "wall_latency_ms": 50451.71
+    },
+    {
+      "id": "seat_ui_payload_shape",
+      "category": "seat_selection",
+      "type": "api",
+      "passed": true,
+      "failures": [],
+      "latency_ms": 20.54,
+      "steps": [
+        {
+          "kind": "GET",
+          "latency_ms": 20.54,
+          "status": 200
+        }
+      ],
+      "wall_latency_ms": 20.74
+    },
+    {
+      "id": "lookup_booking_by_phone",
+      "category": "booking_lookup",
+      "type": "stateful",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "Missing expected text: ['Booking ID', 'Dhaka', 'Rajshahi', 'Soudia', '2026-12-31', '400', 'active']"
+      ],
+      "latency_ms": 15181.44,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 1634.15,
+          "status": 200,
+          "message": "amar mobile number e kono booking ase kina check kore dekhben?",
+          "response_preview": "Apnar booking check korte phone number ta din."
+        },
+        {
+          "kind": "chat",
+          "message_index": 2,
+          "latency_ms": 13547.29,
+          "status": 200,
+          "message": "01733333333",
+          "response_preview": "Sir, apnar 01733333333 number-ti diye check kore dekhechi, kintu ei number-e kono booking pawa jayni. Apni ki onno kono number diye booking korechilen?"
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 15181.77
+    },
+    {
+      "id": "cancel_single_active_booking",
+      "category": "cancellation",
+      "type": "stateful",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "Missing expected text: ['cancelled']"
+      ],
+      "latency_ms": 19215.9,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 16385.23,
+          "status": 200,
+          "message": "cancel my booking",
+          "response_preview": "To cancel your booking, please provide your phone number."
+        },
+        {
+          "kind": "chat",
+          "message_index": 2,
+          "latency_ms": 2830.67,
+          "status": 200,
+          "message": "01744444444",
+          "response_preview": "No active bookings found for phone number 01744444444"
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 19216.26
+    },
+    {
+      "id": "no_hallucinated_holiday_for_normal_route",
+      "category": "hallucination",
+      "type": "single_turn",
+      "passed": false,
+      "error_type": "infrastructure",
+      "failures": [
+        "Infrastructure/model error: The AI assistant is temporarily unavailable because the Gemini API quota is exhausted. Please try again after the retry window or use a Google API key/project with available quota."
+      ],
+      "latency_ms": 6397.86,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 6397.86,
+          "status": 200,
+          "message": "Dhaka theke Rangpur e normal bus time bolo",
+          "response_preview": "The AI assistant is temporarily unavailable because the Gemini API quota is exhausted. Please try again after the retry window or use a Google API key/project with available quota."
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 6398.04
+    },
+    {
+      "id": "no_mixed_provider_policy",
+      "category": "hallucination",
+      "type": "single_turn",
+      "passed": false,
+      "error_type": "infrastructure",
+      "failures": [
+        "Infrastructure/model error: The AI assistant is temporarily unavailable because the Gemini API quota is exhausted. Please try again after the retry window or use a Google API key/project with available quota."
+      ],
+      "latency_ms": 15710.03,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 15710.03,
+          "status": 200,
+          "message": "Shyamoli er privacy policy and contact bolo",
+          "response_preview": "The AI assistant is temporarily unavailable because the Gemini API quota is exhausted. Please try again after the retry window or use a Google API key/project with available quota."
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 15710.22
+    },
+    {
+      "id": "phone_only_should_not_book_without_context",
+      "category": "safety",
+      "type": "single_turn",
+      "passed": true,
+      "error_type": null,
+      "failures": [],
+      "latency_ms": 10746.24,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 10746.24,
+          "status": 200,
+          "message": "01309183295",
+          "response_preview": "Sir, apnar ticket-ti book korar jonno amader kichu proyojoniyo tottho dorkar. Apni kotha theke kothay jete chacchen, kon bus-e jete chacchen, kobe jaben, koyjon passenger, ebong kothay namben (dropping point) seta janale ami booking-ti process korte parbo. Sathe apnar nam-ti-o janaben, please."
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 10746.41
+    },
+    {
+      "id": "name_date_passenger_not_name_confusion",
+      "category": "safety",
+      "type": "multi_turn",
+      "passed": false,
+      "error_type": null,
+      "failures": [
+        "None of must_contain_any appeared: ['name', 'nam', 'phone', 'mobile']"
+      ],
+      "latency_ms": 8465.77,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 2848.92,
+          "status": 200,
+          "message": "I want a cheap ticket from Rangpur to Dhaka",
+          "response_preview": "Sir, National Travels-er Non-AC bus-e Rangpur theke Dhaka-r fare 480 taka, ebong apnar dropping point hobe Gabtoli. Ticket-ti confirm korar jonno kindly apnar nam, phone number, travel date, ebong koto jon passenger jaben seta janaben ki?"
+        },
+        {
+          "kind": "chat",
+          "message_index": 2,
+          "latency_ms": 5616.85,
+          "status": 200,
+          "message": "ami jabo 11 june 2026 e 3 jon",
+          "response_preview": "I need a bit more information to complete the booking."
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 8466.07
+    },
+    {
+      "id": "formatted_policy_output",
+      "category": "ui_formatting",
+      "type": "single_turn",
+      "passed": false,
+      "error_type": "infrastructure",
+      "failures": [
+        "Infrastructure/model error: The AI assistant is temporarily unavailable because the Gemini API quota is exhausted. Please try again after the retry window or use a Google API key/project with available quota."
+      ],
+      "latency_ms": 6246.73,
+      "steps": [
+        {
+          "kind": "chat",
+          "message_index": 1,
+          "latency_ms": 6246.73,
+          "status": 200,
+          "message": "Ena Paribahan er policy bolo",
+          "response_preview": "The AI assistant is temporarily unavailable because the Gemini API quota is exhausted. Please try again after the retry window or use a Google API key/project with available quota."
+        }
+      ],
+      "created_booking_ids": [],
+      "wall_latency_ms": 6246.92
+    }
+  ]
+}
