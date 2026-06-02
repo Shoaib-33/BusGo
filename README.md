@@ -4,6 +4,25 @@ BusGo is an AI-assisted bus ticket booking web application for Bangladeshi users
 
 The main goal is to reduce rigid form filling. Users can ask naturally, the chatbot extracts booking details across turns, asks only for missing information, and connects the conversation to real UI actions such as seat selection, payment, and ticket download.
 
+
+## Project Screenshots
+
+<p align="center">
+  <img src="tests/BusGo/1.png" alt="Screenshot 1" width="30%">
+  <img src="tests/BusGo/2.png" alt="Screenshot 2" width="30%">
+  <img src="tests/BusGo/3.png" alt="Screenshot 3" width="30%">
+</p>
+
+<p align="center">
+  <img src="tests/BusGo/4.png" alt="Screenshot 4" width="30%">
+  <img src="tests/BusGo/5.png" alt="Screenshot 5" width="30%">
+  <img src="tests/BusGo/6.png" alt="Screenshot 6" width="30%">
+</p>
+
+<p align="center">
+  <img src="tests/BusGo/7.png" alt="Screenshot 7" width="30%">
+</p>
+
 ## Key Highlights
 
 | Area | Implementation |
